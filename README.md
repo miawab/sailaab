@@ -42,6 +42,7 @@ npx vercel dev                           # website + /api together (from repo ro
 | Name | Used for | License / cost |
 |---|---|---|
 | [Open-Meteo Flood API](https://open-meteo.com/en/docs/flood-api) (GloFAS v4) | 7-day river discharge forecast + 1984-today history | Free, no key, CC BY 4.0 |
+| [Open-Meteo Elevation API](https://open-meteo.com/en/docs/elevation-api) (Copernicus DEM 90 m) | Ground height for "tap anywhere" risk | Free, no key, CC BY 4.0 |
 | [Google Open Buildings v3](https://sites.research.google/open-buildings/) | House footprints | CC BY 4.0 |
 | [UNOSAT 2022 Pakistan flood extents](https://data.humdata.org/) (HDX) | 2022 flooded area | Free, attribution |
 | [AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) | 3D terrain + house elevation | Free |
