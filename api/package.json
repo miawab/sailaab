@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "type": "commonjs",
+  "description": "Sailaab API (Vercel functions). No dependencies. Pins CommonJS so a root package.json with type=module can't break these files."
+}
