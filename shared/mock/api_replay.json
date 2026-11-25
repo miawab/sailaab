@@ -1,0 +1,4 @@
+{ "days": [
+  {"date":"2022-08-20","discharge":1085,"level":"watch"},{"date":"2022-08-23","discharge":1147,"level":"warning"},
+  {"date":"2022-08-26","discharge":1249,"level":"warning"},{"date":"2022-08-29","discharge":1420,"level":"danger"},
+  {"date":"2022-09-02","discharge":980,"level":"watch"} ] }

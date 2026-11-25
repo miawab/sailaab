@@ -1,0 +1,5 @@
+{ "type": "FeatureCollection", "features": [
+ { "type": "Feature", "geometry": { "type": "Point", "coordinates": [71.98, 34.01] }, "properties": { "id": "kabul_nowshera", "name": "Kabul River at Nowshera", "p90": 650, "p99": 1100, "peak_2022": 1400 } },
+ { "type": "Feature", "geometry": { "type": "Point", "coordinates": [71.52, 30.20] }, "properties": { "id": "chenab_014", "name": "Chenab River near Multan", "p90": 3000, "p99": 7000, "peak_2022": 9000 } },
+ { "type": "Feature", "geometry": { "type": "Point", "coordinates": [67.85, 26.75] }, "properties": { "id": "indus_041", "name": "Indus River near Dadu", "p90": 9000, "p99": 16000, "peak_2022": 21000 } }
+]}

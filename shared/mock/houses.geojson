@@ -1,0 +1,8 @@
+{ "type": "FeatureCollection", "features": [
+ { "type": "Feature", "geometry": { "type": "Polygon", "coordinates": [[[71.9800,34.0150],[71.9802,34.0150],[71.9802,34.0152],[71.9800,34.0152],[71.9800,34.0150]]] },
+   "properties": { "id": "h_000001", "elev_m": 291.4, "height_above_river_m": 1.2, "dist_to_river_m": 90, "flooded_2022": true, "river_point": "kabul_nowshera", "exposure": 0.9 } },
+ { "type": "Feature", "geometry": { "type": "Polygon", "coordinates": [[[71.9810,34.0170],[71.9812,34.0170],[71.9812,34.0172],[71.9810,34.0172],[71.9810,34.0170]]] },
+   "properties": { "id": "h_000002", "elev_m": 294.0, "height_above_river_m": 3.8, "dist_to_river_m": 420, "flooded_2022": true, "river_point": "kabul_nowshera", "exposure": 0.55 } },
+ { "type": "Feature", "geometry": { "type": "Polygon", "coordinates": [[[71.9830,34.0200],[71.9832,34.0200],[71.9832,34.0202],[71.9830,34.0202],[71.9830,34.0200]]] },
+   "properties": { "id": "h_000003", "elev_m": 299.5, "height_above_river_m": 9.3, "dist_to_river_m": 1100, "flooded_2022": false, "river_point": "kabul_nowshera", "exposure": 0.12 } }
+]}

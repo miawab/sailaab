@@ -1,0 +1,7 @@
+{ "point": "kabul_nowshera", "updated": "2026-11-27T06:00Z",
+  "days": [
+    {"date":"2026-11-27","discharge":420,"level":"safe"},{"date":"2026-11-28","discharge":690,"level":"watch"},
+    {"date":"2026-11-29","discharge":1150,"level":"warning"},{"date":"2026-11-30","discharge":1020,"level":"watch"},
+    {"date":"2026-12-01","discharge":800,"level":"watch"},{"date":"2026-12-02","discharge":560,"level":"safe"},
+    {"date":"2026-12-03","discharge":430,"level":"safe"}],
+  "worst": { "date": "2026-11-29", "level": "warning" } }
