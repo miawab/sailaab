@@ -50,5 +50,5 @@ npx vercel dev                           # website + /api together (from repo ro
 | [edge-tts](https://github.com/rany2/edge-tts) | Urdu voice notes | Free |
 | Vercel | Hosting + API | Free tier |
 
-## Team Puckkybtaya
+## Team Puchkebataya
 Built for the Capital Youth Expo 2026 Innovation Sprint. All core logic was written Nov 25-28, 2026.
