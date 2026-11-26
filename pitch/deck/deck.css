@@ -1,0 +1,143 @@
+/* Sailaab deck. Palette: night water, silt paper, warning orange, river blue.
+   Type scale: 120 / 72 / 44 / 32 / 24. */
+:root {
+  --night: #0E1B2A;
+  --paper: #F4F1EA;
+  --card: #FBFAF6;
+  --ink: #16222F;
+  --ink-soft: #4A5568;
+  --mist: #E9EEF2;
+  --mist-soft: #B9C6D2;
+  --orange: #E8792B;
+  --orange-deep: #B5541A;
+  --river: #3FA7C9;
+  --safe: #4CC38A;
+  --watch: #F2C94C;
+  --warning: #F2994A;
+  --danger: #EB5757;
+}
+
+section {
+  padding: 128px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 32px;
+  line-height: 1.4;
+}
+section.dark { background: var(--night); color: var(--mist); }
+section.light { background: var(--paper); color: var(--ink); }
+section.accent { background: var(--orange); color: #16120D; }
+section.foot { padding: 128px 128px 160px; }
+
+/* Arrival motion: content rises in, staged by --i */
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.in { animation: rise 600ms cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i, 0) * 120ms); }
+
+/* Text roles */
+.eyebrow { font-size: 24px; font-weight: 600; letter-spacing: 4px; margin: 0 0 24px; }
+.dark .eyebrow { color: var(--orange); }
+.light .eyebrow { color: var(--orange-deep); }
+.accent .eyebrow { color: #16120D; }
+
+.title { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 72px; font-weight: 700; line-height: 1.08; margin: 0 0 56px; }
+.lead { font-size: 44px; line-height: 1.3; margin: 0; }
+.body { font-size: 32px; line-height: 1.4; margin: 0; }
+.dark .soft { color: var(--mist-soft); }
+.light .soft { color: var(--ink-soft); }
+
+.source { position: absolute; left: 128px; bottom: 64px; width: 1664px; font-size: 24px; margin: 0; }
+.dark .source { color: #8FA1B3; }
+.light .source { color: #5B6675; }
+.accent .source { color: #2A1A0C; }
+
+/* Cover */
+.cover-text { display: flex; flex-direction: column; justify-content: space-between; height: 824px; width: 1000px; }
+.brand { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1.05; margin: 0; }
+.brand-ur { font-family: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', serif; font-size: 72px; line-height: 2; color: var(--river); margin: 0 0 16px; }
+.waves { position: absolute; left: 1060px; top: 0; width: 860px; height: 1080px; }
+
+/* Big numbers */
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.stat { background: var(--card); border-top: 6px solid var(--orange-deep); padding: 32px 40px; }
+.stat-num { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1.05; color: var(--ink); margin: 0; }
+.stat-label { font-size: 32px; color: var(--ink-soft); margin: 0; }
+
+/* Statement */
+.statement { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 72px; font-weight: 700; line-height: 1.12; margin: 0 0 72px; width: 1500px; }
+.hl { color: var(--orange); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+.point { border-left: 4px solid var(--river); padding-left: 32px; }
+
+/* Cards */
+.cards3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+.cards4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 32px; }
+.card { background: var(--card); padding: 40px; border-top: 6px solid var(--river); }
+.card-num { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; color: var(--orange-deep); margin: 0 0 16px; }
+.card-title { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; line-height: 1.15; margin: 0 0 16px; }
+
+/* Demo mockup: map + house card */
+.demo-row { display: flex; gap: 32px; align-items: flex-start; }
+.demo-map { display: flex; flex-direction: column; gap: 16px; width: 1000px; }
+.legend { display: flex; gap: 32px; align-items: center; }
+.legend-item { display: flex; gap: 12px; align-items: center; }
+.legend-dot { width: 20px; height: 20px; }
+.legend-text { font-size: 24px; color: var(--mist-soft); margin: 0; }
+.house-card { background: var(--card); color: var(--ink); padding: 40px; width: 632px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; }
+.badge { background: var(--warning); color: #16120D; font-size: 24px; font-weight: 600; letter-spacing: 2px; padding: 6px 20px; border-radius: 24px; margin: 0; align-self: flex-start; }
+.card-head { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; line-height: 1.15; margin: 0; }
+.reasons { font-size: 28px; color: var(--ink-soft); margin: 0; padding-left: 36px; }
+.chart-label { font-size: 24px; color: var(--ink-soft); margin: 0; }
+.play-row { display: flex; gap: 16px; align-items: center; background: var(--night); padding: 14px 24px; border-radius: 40px; }
+.play-icon { width: 32px; height: 32px; color: var(--orange); }
+.play-text { font-size: 28px; color: var(--mist); margin: 0; }
+
+/* Pipeline diagram */
+.flow { display: flex; align-items: center; gap: 32px; }
+.flow-col { display: flex; flex-direction: column; gap: 16px; }
+.node { background: var(--card); border-left: 6px solid var(--river); padding: 20px 28px; }
+.node-name { font-size: 32px; font-weight: 600; margin: 0; }
+.node-desc { font-size: 24px; color: var(--ink-soft); margin: 0; }
+.engine { background: var(--night); color: var(--mist); padding: 40px; }
+.engine-name { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; margin: 0 0 16px; color: var(--orange); }
+.engine-desc { font-size: 32px; color: var(--mist); margin: 0; }
+.arrow { width: 80px; height: 40px; background: var(--orange-deep); }
+
+/* Risk */
+.formula { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; margin: 0 0 56px; color: var(--mist); }
+.formula-x { color: var(--orange); }
+.risk-cols { display: grid; grid-template-columns: 1040px 1fr; gap: 64px; }
+.col-head { font-size: 32px; font-weight: 600; margin: 0 0 16px; color: var(--mist); }
+.risk-table { font-size: 28px; color: var(--mist); width: 100%; }
+.lv-safe { color: var(--safe); }
+.lv-watch { color: var(--watch); }
+.lv-warning { color: var(--warning); }
+.lv-danger { color: var(--danger); }
+.plain-list { font-size: 32px; color: var(--mist-soft); margin: 0; padding-left: 40px; }
+
+/* Voice */
+.voice-row { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 0 0 40px; }
+.msg { background: var(--card); padding: 40px; border-top: 6px solid var(--orange-deep); }
+.msg-label { font-size: 24px; font-weight: 600; letter-spacing: 2px; color: var(--orange-deep); margin: 0 0 16px; }
+.urdu { font-family: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', serif; font-size: 32px; line-height: 2.1; text-align: right; direction: rtl; margin: 0; color: var(--ink); }
+.msg-en { font-size: 32px; line-height: 1.45; margin: 0; color: var(--ink); }
+.pills { display: flex; gap: 16px; align-items: center; }
+.pill { background: var(--night); color: var(--mist); font-size: 32px; padding: 8px 28px; border-radius: 40px; margin: 0; }
+.pill-ur { font-family: 'Noto Nastaliq Urdu', serif; line-height: 1.8; }
+.pill-ar { font-family: 'Noto Naskh Arabic', serif; }
+.pill-note { font-size: 24px; color: var(--ink-soft); margin: 0 0 0 16px; }
+
+/* Next (accent slide) */
+.next-card { border-top: 4px solid #16120D; padding-top: 32px; }
+.next-num { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 72px; font-weight: 700; line-height: 1; margin: 0 0 24px; }
+.next-title { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; line-height: 1.15; margin: 0 0 16px; }
+.next-body { font-size: 32px; margin: 0; }
+
+/* Team */
+.person { background: #16283B; padding: 40px; border-top: 6px solid var(--orange); }
+.person-name { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; margin: 0 0 8px; }
+.person-role { font-size: 32px; color: var(--mist-soft); margin: 0; }
+.links { display: flex; gap: 64px; margin-top: auto; }
+.link-label { font-size: 24px; color: var(--orange); font-weight: 600; letter-spacing: 2px; margin: 0; }
+.link-value { font-size: 32px; margin: 0; }

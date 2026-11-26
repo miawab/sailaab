@@ -1,0 +1,21 @@
+<section id="how" class="light foot">
+<p class="eyebrow">HOW IT WORKS</p>
+<h2 class="title">Free global data in, a warning for one house out</h2>
+<div class="flow">
+<div class="flow-col" style="width:500px">
+<div class="node in" style="--i:0"><p class="node-name">River forecast</p><p class="node-desc">GloFAS via Open-Meteo, 7 days ahead</p></div>
+<div class="node in" style="--i:1"><p class="node-name">Every building</p><p class="node-desc">Google Open Buildings footprints</p></div>
+<div class="node in" style="--i:2"><p class="node-name">The 2022 flood</p><p class="node-desc">UNOSAT satellite flood extent</p></div>
+<div class="node in" style="--i:3"><p class="node-name">Ground height</p><p class="node-desc">AWS terrain tiles</p></div>
+</div>
+<x-shape kind="arrow-right" class="arrow"></x-shape>
+<div class="engine in" style="width:420px; --i:4"><h3 class="engine-name">Risk engine</h3><p class="engine-desc">Compares the river forecast with each house’s height, distance and flood history.</p></div>
+<x-shape kind="arrow-right" class="arrow"></x-shape>
+<div class="flow-col" style="width:440px">
+<div class="node in" style="--i:5"><p class="node-name">3D map</p><p class="node-desc">Every river and house coloured by risk</p></div>
+<div class="node in" style="--i:6"><p class="node-name">Voice alert</p><p class="node-desc">Under 20 seconds, in 4 languages</p></div>
+</div>
+</div>
+<p class="source">All sources are free and open. No paid APIs. The full list is in the project README.</p>
+<aside>Everything we use is free, global data. The river forecast comes from GloFAS, the global flood forecasting system, through Open-Meteo. The buildings are Google's Open Buildings. The 2022 flood is UNOSAT's satellite map, and the ground height comes from terrain tiles. Our risk engine joins them, and the result goes to the map and the voice alert. Because the data covers the whole country, the same pipeline works for any district.</aside>
+</section>
