@@ -50,6 +50,7 @@ npx vercel dev                           # website + /api together (from repo ro
 | [OpenFreeMap](https://openfreemap.org/) (OpenStreetMap data) | Map tiles + fonts for our own Sailaab map style | Free, no key, ODbL (OSM) |
 | [Open-Meteo Weather + Ensemble API](https://open-meteo.com/en/docs/ensemble-api) (ECMWF) | 7-day rain forecast, soil wetness, and the 50 forecast runs behind the rain "% sure" | Free, no key, CC BY 4.0 |
 | [Open-Meteo Historical Forecast API](https://open-meteo.com/en/docs/historical-forecast-api) | Rain on the 2022 demo day | Free, no key, CC BY 4.0 |
+| [Open-Meteo Air Quality API](https://open-meteo.com/en/docs/air-quality-api) (Copernicus CAMS) | Smog (PM2.5) forecast for the Air mode | Free, no key, CC BY 4.0 |
 | [Natural Earth](https://www.naturalearthdata.com/) | Pakistan outline + major river lines | Public domain |
 | [Google Fonts](https://fonts.google.com/) (Inter, Inter Tight, Noto Nastaliq Urdu, Noto Naskh Arabic) | Type, incl. Urdu and Sindhi | OFL |
 | React, Vite | Website | MIT |

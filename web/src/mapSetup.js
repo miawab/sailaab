@@ -141,6 +141,11 @@ async function addLayers(map) {
   map.addLayer({ id: 'houses-line', type: 'line', source: 'houses', minzoom: 14,
     paint: { 'line-color': '#FFFFFF', 'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 1] } }, firstLabel);
 
+  // Smog: soft blobs of colour from the air-quality grid (Air mode only). The Pakistan fade sits on top.
+  map.addSource('air', { type: 'geojson', data: empty });
+  map.addLayer({ id: 'air', type: 'circle', source: 'air', layout: { visibility: 'none' },
+    paint: { 'circle-color': levelColorExpr(), 'circle-radius': z(4, 34, 7, 140, 10, 620), 'circle-blur': 1, 'circle-opacity': 0.32 } }, firstLabel);
+
   // Showcase rivers (detailed lines from Part B).
   map.addSource('rivers', { type: 'geojson', data: empty });
   map.addLayer({ id: 'rivers-glow', type: 'line', source: 'rivers', layout: { 'line-cap': 'round', 'line-join': 'round' },

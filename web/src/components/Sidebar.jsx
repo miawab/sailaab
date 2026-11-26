@@ -107,8 +107,9 @@ export default function Sidebar(props) {
 
         {/* mode */}
         <div className="tabs">
-          <button className={mode === 'now' ? 'on' : ''} onClick={() => setMode('now')}><Icon name="clock" size={17} />Forecast</button>
-          <button className={mode === 'past' ? 'on' : ''} onClick={() => setMode('past')}><Icon name="test" size={17} />2022 test</button>
+          <button className={mode === 'now' ? 'on' : ''} onClick={() => setMode('now')}><Icon name="waves" size={17} />Floods</button>
+          <button className={mode === 'past' ? 'on' : ''} onClick={() => setMode('past')}><Icon name="test" size={17} />2022</button>
+          <button className={mode === 'air' ? 'on' : ''} onClick={() => setMode('air')}><Icon name="wind" size={17} />Air</button>
         </div>
         {mode === 'past' && <Replay {...replayProps} />}
 

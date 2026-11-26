@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { createMap, PK_BOUNDS, NOWSHERA, HOUSE_COLOR, LAYER_GROUPS } from './mapSetup.js';
 import { LEVELS } from './levels.js';
 import { hazards, worst } from './hazards.js';
+import { airGrid, airSpot } from './air.js';
+import AirPanel from './components/AirPanel.jsx';
 import Icon from './components/Icon.jsx';
 import Panel from './components/Panel.jsx';
 import Sidebar from './components/Sidebar.jsx';
@@ -63,7 +65,8 @@ export default function App() {
   const [inPk, setInPk] = useState(true);
   const [pinLevel, setPinLevel] = useState(null);
   const [result, setResult] = useState(null);
-  const [hz, setHz] = useState(null); // rain + hills + chances for the checked spot
+  const [hz, setHz] = useState(null);
+  const airLoaded = useRef(false); // rain + hills + chances for the checked spot
   const [toast, setToast] = useState(null);
 
   const [sideOpen, setSideOpen] = useState(isDesktop);
@@ -144,6 +147,21 @@ export default function App() {
     }
     if (mode !== 'past') map.setPaintProperty('flood2022', 'fill-opacity', layers.flood2022 ? 0.28 : 0);
   }, [ready, layers, mode]);
+
+  // ---------- air mode ----------
+  useEffect(() => {
+    if (!ready) return;
+    const map = mapRef.current;
+    const on = mode === 'air';
+    map.setLayoutProperty('air', 'visibility', on ? 'visible' : 'none');
+    for (const id of ['national', 'national-halo', 'houses', 'houses-line']) {
+      if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', on ? 'none' : (id.startsWith('house') ? (layers.houses ? 'visible' : 'none') : (layers.points ? 'visible' : 'none')));
+    }
+    if (on && !airLoaded.current) {
+      airLoaded.current = true;
+      airGrid((p) => inside(p, map.pakistan)).then((g) => map.getSource('air')?.setData(g)).catch(() => { airLoaded.current = false; say('Could not load air data'); });
+    }
+  }, [ready, mode, layers]);
 
   // ---------- home ----------
   useEffect(() => {
@@ -229,6 +247,15 @@ export default function App() {
   const check = useCallback(async () => {
     const map = mapRef.current;
     const c = map.getCenter();
+    if (mode === 'air') {
+      setResult({ kind: 'air', status: 'loading', coords: [c.lng, c.lat] });
+      try {
+        const air = await airSpot(c.lng, c.lat);
+        setResult({ kind: 'air', status: 'ok', air, coords: [c.lng, c.lat] });
+        setPinLevel(air.today.level);
+      } catch { setResult({ kind: 'air', status: 'error', coords: [c.lng, c.lat] }); }
+      return;
+    }
     const house = map.getZoom() >= 13 ? map.queryRenderedFeatures(map.project(c), { layers: ['houses'] })[0] : null;
 
     if (selectedRef.current) map.setFeatureState({ source: 'houses', id: selectedRef.current }, { selected: false });
@@ -260,7 +287,7 @@ export default function App() {
     } catch (e) {
       setResult({ kind, status: 'error', error: e.message, coords });
     }
-  }, [q]);
+  }, [q, mode]);
 
   const locate = () => {
     if (!navigator.geolocation) return say('Location is not available on this device');
@@ -292,11 +319,12 @@ export default function App() {
     setPlaying(false);
     closePanel();
     if (m === 'past') goNowshera();
+    if (m === 'air') allPakistan();
   };
 
   const pinColor = !inPk ? '#A3ADBF' : pinLevel ? LEVELS[pinLevel].color : 'var(--cobalt)';
-  const checkLabel = 'Safe here?';
-  const checkUr = 'کیا یہاں محفوظ ہے؟';
+  const checkLabel = mode === 'air' ? 'Air here?' : 'Safe here?';
+  const checkUr = mode === 'air' ? 'یہاں ہوا کیسی ہے؟' : 'کیا یہاں محفوظ ہے؟';
 
   return (
     <div className="app" style={{ '--sb': `${sbW}px`, '--pn': `${pnW}px` }}>
@@ -344,7 +372,7 @@ export default function App() {
       {/* the main button */}
       {mode !== 'past' && (
         <button className={`check ${inPk ? '' : 'off'}`} onClick={check} disabled={!ready || !inPk || moving}>
-          <span className="check-icon"><Icon name={!inPk ? 'x' : 'drop'} size={22} /></span>
+          <span className="check-icon"><Icon name={!inPk ? 'x' : mode === 'air' ? 'wind' : 'drop'} size={22} /></span>
           <span className="check-text">
             <b>{inPk ? checkLabel : 'Outside Pakistan'}</b>
             <small className="font-nastaliq">{inPk ? checkUr : 'پاکستان سے باہر'}</small>
@@ -354,7 +382,9 @@ export default function App() {
 
       {toast && <div className="toast">{toast}</div>}
 
-      {result && <Panel result={result} hz={hz} lang={lang} setLang={setLang} today={today} onClose={closePanel} />}
+      {result && (result.kind === 'air'
+        ? <AirPanel result={result} onClose={closePanel} />
+        : <Panel result={result} hz={hz} lang={lang} setLang={setLang} today={today} onClose={closePanel} />)}
     </div>
   );
 }
