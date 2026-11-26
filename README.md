@@ -46,7 +46,12 @@ npx vercel dev                           # website + /api together (from repo ro
 | [Google Open Buildings v3](https://sites.research.google/open-buildings/) | House footprints | CC BY 4.0 |
 | [UNOSAT 2022 Pakistan flood extents](https://data.humdata.org/) (HDX) | 2022 flooded area | Free, attribution |
 | [AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) | 3D terrain + house elevation | Free |
-| [MapLibre GL JS](https://maplibre.org/) | 3D map | BSD-3 |
+| [MapLibre GL JS](https://maplibre.org/) | The map | BSD-3 |
+| [OpenFreeMap](https://openfreemap.org/) (OpenStreetMap data) | Map tiles + fonts for our own Sailaab map style | Free, no key, ODbL (OSM) |
+| [Open-Meteo Weather + Ensemble API](https://open-meteo.com/en/docs/ensemble-api) (ECMWF) | 7-day rain forecast, soil wetness, and the 50 forecast runs behind the rain "% sure" | Free, no key, CC BY 4.0 |
+| [Open-Meteo Historical Forecast API](https://open-meteo.com/en/docs/historical-forecast-api) | Rain on the 2022 demo day | Free, no key, CC BY 4.0 |
+| [Natural Earth](https://www.naturalearthdata.com/) | Pakistan outline + major river lines | Public domain |
+| [Google Fonts](https://fonts.google.com/) (Inter, Inter Tight, Noto Nastaliq Urdu, Noto Naskh Arabic) | Type, incl. Urdu and Sindhi | OFL |
 | React, Vite | Website | MIT |
 | [edge-tts](https://github.com/rany2/edge-tts) | Urdu + English voice notes (fallback when no human recording) | Free, LGPL-3.0 |
 | [FFmpeg](https://ffmpeg.org/) | Cleans up phone recordings of the voice notes into mp3 | Free, LGPL/GPL |
