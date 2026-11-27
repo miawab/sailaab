@@ -4,6 +4,8 @@
 
 In 2022, floods covered a third of Pakistan. The warnings that existed were district-wide text bulletins, written in English and sent too late. Sailaab tells one family whether **their own house** is at risk in the next 7 days and why, on a simple map and in a voice note in their own language.
 
+**Live site:** https://sailaab-pk.vercel.app (add `?demo=1` to see the 2022 flood demo)
+
 **Demo video:** _link added on submission_
 
 ## What it does
