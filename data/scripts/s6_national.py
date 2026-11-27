@@ -123,26 +123,40 @@ def main():
 
     features = []
     used_cells = set()
-    for name, parts in lines.items():
-        pts = []
-        for part in parts:
+    # The Indus goes first, so cells where a tributary meets it belong to the Indus.
+    order = sorted(lines, key=lambda n: (n != "Indus", n))
+    for name in order:
+        pieces = []
+        for part in lines[name]:
             n = max(1, int(part.length // SPACING_M))
+            piece = []
             for k in range(n + 1):
                 p = part.interpolate(min(k * SPACING_M + (part.length - n * SPACING_M) / 2, part.length))
-                pts.append(p)
-        river_pts = []
-        for p in pts:
-            g = to_wgs(p)
-            la, lo, mean = snap(g.y, g.x)
-            if (la, lo) in used_cells:
-                continue
-            used_cells.add((la, lo))
-            river_pts.append({"lat": la, "lon": lo, "mean": mean, "utm": p})
+                g = to_wgs(p)
+                la, lo, mean = snap(g.y, g.x)
+                if (la, lo) in used_cells:
+                    continue
+                used_cells.add((la, lo))
+                piece.append({"lat": la, "lon": lo, "mean": mean, "utm": p})
+            if piece:
+                # Each piece runs upstream (less water) to downstream (more water).
+                if piece[0]["mean"] > piece[-1]["mean"]:
+                    piece.reverse()
+                pieces.append(piece)
+        # Pieces of the same river in upstream-to-downstream order too.
+        pieces.sort(key=lambda pc: statistics.median(p["mean"] for p in pc))
+        river_pts = [p for pc in pieces for p in pc]
+        # A tributary point next to a junction can snap onto the bigger river
+        # (e.g. the last Kabul point grabbing an Indus cell). Drop points with
+        # over 3x the river's typical flow.
+        if name != "Indus" and len(river_pts) >= 3:
+            typical = statistics.median(p["mean"] for p in river_pts)
+            jumped = [p for p in river_pts if typical > 0 and p["mean"] > 3 * typical]
+            if jumped:
+                print(f"  {name}: dropped {len(jumped)} point(s) that snapped onto a bigger river")
+            river_pts = [p for p in river_pts if p not in jumped]
         if not river_pts:
             continue
-        # Number from upstream (less water) to downstream (more water).
-        if river_pts[0]["mean"] > river_pts[-1]["mean"]:
-            river_pts.reverse()
 
         key = name.lower().replace(" ", "")
         for i, rp in enumerate(river_pts, start=1):

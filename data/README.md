@@ -19,7 +19,7 @@ rate limit. Re-runs take a few minutes.
 | `web/public/data/houses.geojson` | 44,000 buildings (25,000 Nowshera, 19,000 Dadu), 14.8 MB, with `elev_m`, `height_above_river_m`, `dist_to_river_m`, `flooded_2022`, `river_point`, `exposure` |
 | `web/public/data/flood2022.geojson` | Area seen under water in Jul-Aug 2022 (UNOSAT), both districts |
 | `web/public/data/rivers.geojson` | River lines in both districts (OpenStreetMap) |
-| `web/public/data/national_points.geojson` | ~250 forecast points along 21 major rivers of Pakistan, with `p90`, `p99`, `peak_2022` |
+| `web/public/data/national_points.geojson` | 235 forecast points along 20 major rivers of Pakistan, with `p90`, `p99`, `peak_2022` |
 | `shared/river_points.json` | The 4 showcase forecast points the houses use, with thresholds |
 | `web/public/data/proof_kabul_nowshera.json` | Proof 1: real 2022 flows at Nowshera (FFC) next to GloFAS, day by day |
 | `data/proof/ffc_vs_glofas_nowshera.csv` | Same numbers as a spreadsheet |
@@ -63,12 +63,13 @@ no name, so we call it "Johi flood channel".
    ("watch"), **p99** = 1% of days ("warning"), **peak_2022** = the biggest day of 2022.
    (Open-Meteo's GloFAS history is empty before 1997 at these cells, even though
    the API takes 1984 dates.)
-6. **National points** (`s6_national.py`): a point every 30 km along 21 rivers
+6. **National points** (`s6_national.py`): a point every 30 km along 20 rivers
    (Indus, Jhelum, Chenab, Ravi, Sutlej from Natural Earth; Kabul, Swat, Gilgit,
    Hunza, Chitral, Kurram, etc. from OSM). Each point is moved to the GloFAS cell
    with the most water within one cell (~5 km), so the live forecast and the
    thresholds are for the same cell. Thresholds use 2013-2021: the free API
    allows ~10,000 units a day, and the full history for 250 points would cost ~25,000.
+   Points next to a junction that snapped onto the bigger river are dropped.
    Ids run upstream to downstream (`indus_001`, `indus_002`…) as Part C's
    nearest-river code expects. Points with p99 under 10 m³/s are dry
    channels, and the API shows them as "no data".
