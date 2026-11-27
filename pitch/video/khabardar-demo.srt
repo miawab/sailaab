@@ -1,0 +1,191 @@
+1
+00:00:00,300 --> 00:00:02,820
+Khabardar. It means beware.
+
+2
+00:00:02,820 --> 00:00:04,000
+Flood warnings for your house
+
+3
+00:00:04,000 --> 00:00:05,180
+not your district.
+
+4
+00:00:06,300 --> 00:00:08,120
+In 2022
+
+5
+00:00:08,120 --> 00:00:11,400
+one monsoon put a third of Pakistan under water.
+
+6
+00:00:11,400 --> 00:00:13,840
+Thirty-three million people were affected.
+
+7
+00:00:13,840 --> 00:00:16,900
+The warnings that existed named whole districts.
+
+8
+00:00:16,900 --> 00:00:18,880
+But water doesn't flood a district.
+
+9
+00:00:18,880 --> 00:00:20,220
+It floods a house.
+
+10
+00:00:21,200 --> 00:00:23,160
+Here is how it works.
+
+11
+00:00:23,160 --> 00:00:26,320
+Move the pin anywhere in Pakistan and tap once.
+
+12
+00:00:26,320 --> 00:00:28,300
+It checks the river forecast
+
+13
+00:00:28,300 --> 00:00:30,800
+heavy rain, and flash floods in the hills
+
+14
+00:00:30,800 --> 00:00:33,440
+and gives one answer for the next seven days.
+
+15
+00:00:34,500 --> 00:00:36,900
+This is Dadu in 3D
+
+16
+00:00:36,900 --> 00:00:39,740
+on the twenty-seventh of August 2022
+
+17
+00:00:39,740 --> 00:00:42,080
+the day the Johi channel peaked.
+
+18
+00:00:42,080 --> 00:00:45,300
+The blue is what satellites saw under water.
+
+19
+00:00:45,300 --> 00:00:48,060
+Every house is coloured by its own risk.
+
+20
+00:00:49,100 --> 00:00:50,940
+In Nowshera and Dadu
+
+21
+00:00:50,940 --> 00:00:54,200
+all forty-four thousand houses have their own level.
+
+22
+00:00:54,200 --> 00:00:55,740
+Here is one near Johi
+
+23
+00:00:55,740 --> 00:00:58,840
+on the twenty-fifth of August 2022.
+
+24
+00:00:58,840 --> 00:01:00,660
+Danger, from the twenty-seventh.
+
+25
+00:01:00,660 --> 00:01:02,260
+Three meters above the river
+
+26
+00:01:02,260 --> 00:01:03,640
+and it flooded before.
+
+27
+00:01:04,700 --> 00:01:06,420
+And the warning is spoken
+
+28
+00:01:06,420 --> 00:01:07,780
+in Urdu, Sindhi
+
+29
+00:01:07,780 --> 00:01:09,260
+Punjabi or English.
+
+30
+00:01:13,700 --> 00:01:14,980
+Does it work?
+
+31
+00:01:14,980 --> 00:01:17,720
+We replayed the real 2022 flood.
+
+32
+00:01:17,720 --> 00:01:19,760
+The Johi channel crossed our warning line
+
+33
+00:01:19,760 --> 00:01:22,300
+ten days before its record peak.
+
+34
+00:01:22,300 --> 00:01:25,180
+Blue houses are the ones that really went under.
+
+35
+00:01:25,180 --> 00:01:27,040
+Johi town stayed dry.
+
+36
+00:01:28,000 --> 00:01:30,740
+We also show where it falls short.
+
+37
+00:01:30,740 --> 00:01:33,500
+At Nowshera, Pakistan's own gauges saw five
+
+38
+00:01:33,500 --> 00:01:36,280
+times more water than the free global model.
+
+39
+00:01:36,280 --> 00:01:37,600
+The timing was right
+
+40
+00:01:37,600 --> 00:01:39,400
+the size was not.
+
+41
+00:01:39,400 --> 00:01:41,460
+Adding those gauges is our next step.
+
+42
+00:01:42,300 --> 00:01:45,080
+And we tested every house blind.
+
+43
+00:01:45,080 --> 00:01:47,300
+The houses we flag really flooded seventy
+
+44
+00:01:47,300 --> 00:01:48,860
+-six percent of the time
+
+45
+00:01:48,860 --> 00:01:50,980
+against forty-six for the rest.
+
+46
+00:01:52,520 --> 00:01:54,020
+Khabardar. Free data
+
+47
+00:01:54,020 --> 00:01:55,400
+every house in Pakistan
+
+48
+00:01:55,400 --> 00:01:56,780
+in your own language.
