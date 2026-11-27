@@ -1,0 +1,13 @@
+geopandas>=1.0
+shapely>=2.0
+pyproj
+pandas
+numpy
+scipy
+rasterio
+requests
+s2sphere
+# only for scripts/s9_proof_forecasts.py (needs a free Copernicus account):
+# cdsapi
+# xarray
+# netCDF4
