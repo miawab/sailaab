@@ -231,20 +231,28 @@ export default function App() {
     Promise.all(A.points.map((id) => getJson(`/api/replay?point=${id}`))).then((rs) => {
       const points = Object.fromEntries(rs.map((r) => [r.point, r]));
       const main = points[A.main];
-      setReplay({ area, main: A.main, points, days: main.days, thresholds: main.thresholds });
-      // start a few days before the river leaves its banks
-      const first = main.days.findIndex((d) => d.level === 'warning');
-      setDay(Math.max(0, first - 4));
+      // the peak, and the start of the rise that led to it (the unbroken run above Safe)
+      const peak = main.days.reduce((b, x, i) => (x.discharge > main.days[b].discharge ? i : b), 0);
+      let rise = peak;
+      while (rise > 0 && main.days[rise - 1].level !== 'safe') rise--;
+      setReplay({ area, main: A.main, points, days: main.days, thresholds: main.thresholds, peak });
+      setDay(Math.max(0, rise - 3));
       if (autoPlay.current) setPlaying(true);
     }).catch(() => say('Could not load the 2022 data'));
   }, [mode, replay, area, loadArea]);
 
   useEffect(() => {
     if (!playing || !replay || replay.area !== area) return;
+    // In the demo it stops on the peak day, so the flooded houses stay on screen. Play again to go on.
+    const stopAt = autoPlay.current ? replay.peak : replay.days.length - 1;
     const t = setInterval(() => setDay((d) => {
-      if (d >= replay.days.length - 1) { setPlaying(false); return d; }
+      if (d >= replay.days.length - 1 || (d === stopAt && autoPlay.current)) {
+        setPlaying(false);
+        autoPlay.current = false;
+        return d;
+      }
       return d + 1;
-    }), 260);
+    }), 380);
     return () => clearInterval(t);
   }, [playing, replay, area]);
 
