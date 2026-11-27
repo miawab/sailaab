@@ -61,6 +61,7 @@ npx vercel dev                           # website + /api together (from repo ro
 | React, Vite | Website | MIT |
 | [edge-tts](https://github.com/rany2/edge-tts) | Urdu + English voice notes (fallback when no human recording) | Free, LGPL-3.0 |
 | [FFmpeg](https://ffmpeg.org/) | Cleans up phone recordings of the voice notes into mp3 | Free, LGPL/GPL |
+| [Meta MMS-TTS Punjabi](https://huggingface.co/facebook/mms-tts-pan) via [Hugging Face Transformers](https://github.com/huggingface/transformers) + [PyTorch](https://pytorch.org/) | Punjabi voice notes (no Microsoft Punjabi voice exists). Runs offline, no key | Free; model CC-BY-NC 4.0, libraries Apache-2.0 / BSD |
 | Vercel | Hosting + API | Free tier |
 
 ## Team Puchkebataya

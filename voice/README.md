@@ -8,18 +8,24 @@ Sailaab sends a short voice note with every alert, in 4 languages, so people who
 | `../shared/alerts.json` | The alert text: 4 levels (safe / watch / warning / danger) × 4 languages (ur / sd / pa / en). The website reads this. |
 | `make_voices.py` | Turns that text into `web/public/voice/{level}_{lang}.mp3` and fills in the `audio` paths in `alerts.json`. |
 | `recordings/` | Drop real human recordings here. They replace the computer voice. |
+| `tts/` | Notes made by other free voice tools (right now: Punjabi). Used when there's no human recording. |
+| `punjabi/` | `make_punjabi.py` makes the Punjabi notes with Meta's free MMS-TTS model from Hugging Face. `pa_gurmukhi.json` is our Punjabi text written in Gurmukhi, because that model can't read Shahmukhi. The site still shows the Shahmukhi text. |
 
 ## How `make_voices.py` picks the audio for each note
 1. **Real recording** in `recordings/` (e.g. `warning_ur.m4a`)? Use it. ffmpeg cuts the silence at the start and end, evens out the volume and saves it as mp3.
-2. Otherwise, **edge-tts** (free Microsoft neural voices) reads the text. It only has Urdu and English, not Sindhi or Punjabi.
-3. Otherwise there's **no audio** (`"audio": null`) and the app shows the text only.
+2. Otherwise, a file in **`tts/`** (made by another voice tool) is used the same way.
+3. Otherwise, **edge-tts** (free Microsoft neural voices) reads the text. It only has Urdu and English, not Sindhi or Punjabi.
+4. Otherwise there's **no audio** (`"audio": null`) and the app shows the text only.
 
 Run it from the repo root after any change to the text or recordings:
 ```bash
 pip install edge-tts          # ffmpeg also needs to be installed for recordings
 python voice/make_voices.py   # add --male for male computer voices
 ```
-It prints every note with its length and flags any over 20 seconds.
+It prints every note with its length. Notes from files that run over 20 seconds are sped up slightly (at most 25%) to fit.
+`--only-recordings` skips edge-tts and keeps the Urdu/English notes already there.
+
+Where each note comes from right now: Urdu + English = edge-tts, Sindhi = human recordings, Punjabi = Meta MMS-TTS (`punjabi/make_punjabi.py`, setup steps at the top of that file).
 
 ## Recording the voice notes
 - Name each file `{level}_{lang}` plus any extension: `danger_ur.m4a`, `watch_sd.opus`. A WhatsApp voice note you send to yourself and save works fine.
@@ -42,5 +48,6 @@ Check each line against NDMA's current page before the pitch, and cite it on the
 
 ## Still to do
 - [ ] Native speakers check the Urdu, Sindhi and Punjabi text (the drafts were written with AI help)
-- [ ] Record the notes (at least Urdu + English; Sindhi and Punjabi if we find speakers)
+- [x] Sindhi: all 4 notes recorded by a person
+- [ ] Punjabi: computer voice for now (Meta MMS-TTS). A native speaker recording would sound better, and so would checking `punjabi/pa_gurmukhi.json`
 - [ ] Re-run `make_voices.py` and commit the mp3s

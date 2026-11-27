@@ -3,17 +3,21 @@
 For every alert level (safe/watch/warning/danger) and language (ur/sd/pa/en):
   1. If a human recording exists in voice/recordings/ (e.g. warning_ur.m4a),
      clean it up with ffmpeg and use it. Real voices always win.
-  2. Otherwise, if edge-tts has a voice for that language (Urdu, English),
+  2. Otherwise, if another free voice tool made a file in voice/tts/
+     (e.g. warning_pa.wav from voice/punjabi/make_punjabi.py), use that.
+  3. Otherwise, if edge-tts has a voice for that language (Urdu, English),
      generate the note from the text in shared/alerts.json.
-  3. Otherwise there is no audio and the app shows the text only.
+  4. Otherwise there is no audio and the app shows the text only.
+
+Notes from files (1 and 2) longer than 20 s are sped up a little to fit.
 
 Output goes to web/public/voice/{level}_{lang}.mp3, and the "audio" fields in
 shared/alerts.json are updated to match.
 
 Usage (from the repo root):
-  python voice/make_voices.py              # recordings + edge-tts for the rest
+  python voice/make_voices.py              # recordings + tts files + edge-tts for the rest
   python voice/make_voices.py --male       # male edge-tts voices instead of female
-  python voice/make_voices.py --only-recordings
+  python voice/make_voices.py --only-recordings   # skip edge-tts, keep its existing notes
 """
 
 import argparse
@@ -27,14 +31,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 ALERTS = ROOT / "shared" / "alerts.json"
 RECORDINGS = ROOT / "voice" / "recordings"
+TTS_FILES = ROOT / "voice" / "tts"
 OUT = ROOT / "web" / "public" / "voice"
 
 LEVELS = ["safe", "watch", "warning", "danger"]
 LANGS = ["ur", "sd", "pa", "en"]
 RECORDING_EXTS = [".m4a", ".mp3", ".wav", ".ogg", ".opus", ".aac", ".amr", ".mp4"]
 MAX_SECONDS = 20
+MAX_SPEEDUP = 1.25  # never speed a note up by more than 25%, or it sounds rushed
 
-# edge-tts has no Sindhi or Punjabi voices, so those need human recordings.
+# edge-tts has no Sindhi or Punjabi voices, so those need human recordings
+# (or a file in voice/tts/).
 TTS_VOICES = {
     "female": {"ur": "ur-PK-UzmaNeural", "en": "en-IN-NeerjaNeural"},
     "male": {"ur": "ur-PK-AsadNeural", "en": "en-IN-PrabhatNeural"},
@@ -65,25 +72,34 @@ def duration_seconds(path):
         return None
 
 
-def find_recording(level, lang):
+def find_file(folder, level, lang):
     for ext in RECORDING_EXTS:
-        path = RECORDINGS / f"{level}_{lang}{ext}"
+        path = folder / f"{level}_{lang}{ext}"
         if path.exists():
             return path
     return None
 
 
 def convert_recording(src, dst):
-    """Phone recording -> clean mono mp3: trim silence at both ends, even out loudness."""
+    """Audio file -> clean mono mp3: trim silence at both ends, even out loudness.
+    If the result is over 20 s, redo it slightly faster (pitch stays the same)."""
     trim = ("silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.2,"
             "areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.3,"
             "areverse")
-    subprocess.run(
-        ["ffmpeg", "-y", "-loglevel", "error", "-i", str(src),
-         "-af", f"highpass=f=80,{trim},loudnorm=I=-16:TP=-1.5:LRA=11",
-         "-ac", "1", "-ar", "44100", "-b:a", "96k", str(dst)],
-        check=True,
-    )
+
+    def run(tempo):
+        speed = f",atempo={tempo:.3f}" if tempo > 1 else ""
+        subprocess.run(
+            ["ffmpeg", "-y", "-loglevel", "error", "-i", str(src),
+             "-af", f"highpass=f=80,{trim}{speed},loudnorm=I=-16:TP=-1.5:LRA=11",
+             "-ac", "1", "-ar", "44100", "-b:a", "96k", str(dst)],
+            check=True,
+        )
+
+    run(1.0)
+    secs = duration_seconds(dst)
+    if secs and secs > MAX_SECONDS:
+        run(min(secs / (MAX_SECONDS - 0.5), MAX_SPEEDUP))
 
 
 async def synthesize(text, voice, dst):
@@ -114,11 +130,15 @@ async def main():
         for lang in LANGS:
             entry = alerts[level][lang]
             dst = OUT / f"{level}_{lang}.mp3"
-            recording = find_recording(level, lang)
+            recording = find_file(RECORDINGS, level, lang)
+            kind = "recording"
+            if not recording:
+                recording = find_file(TTS_FILES, level, lang)
+                kind = "tts file"
 
             if recording and ffmpeg_ok:
                 convert_recording(recording, dst)
-                source = f"recording ({recording.name})"
+                source = f"{kind} ({recording.name})"
             elif recording:
                 print(f"!! {recording.name} found but ffmpeg is missing, skipping it", file=sys.stderr)
                 recording = None
@@ -127,6 +147,8 @@ async def main():
                 if lang in voices and not args.only_recordings:
                     await synthesize(spoken(entry["text"], lang), voices[lang], dst)
                     source = f"edge-tts ({voices[lang]})"
+                elif lang in voices and dst.exists():
+                    source = "kept (edge-tts, not remade)"  # --only-recordings: leave it alone
                 else:
                     if dst.exists():
                         dst.unlink()  # stale file from an earlier run

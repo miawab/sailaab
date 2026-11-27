@@ -10,7 +10,7 @@
     },
     "pa": {
       "text": "اطلاع: تہاڈے نیڑے دریا دا پانی معمول تے اے، تے ایس ہفتے ہڑھ دا کوئی خطرہ نئیں۔ اپنے ضروری کاغذ پلاسٹک دے تھیلے وچ اک تھاں رکھو، تے ریسکیو 1122 دا نمبر فون وچ محفوظ کر لؤ۔",
-      "audio": null
+      "audio": "/voice/safe_pa.mp3"
     },
     "en": {
       "text": "Update: the river near you is at a normal level, and no flooding is expected this week. Keep your important documents together in a plastic bag, and save the Rescue 1122 number in your phone.",
@@ -28,7 +28,7 @@
     },
     "pa": {
       "text": "ہوشیار رہو: تہاڈے نیڑے دریا دا پانی معمول توں ودھ اے تے ایس ہفتے ہور ودھ سکدا اے۔ کاغذ، دوائیاں، پانی تے سُکا کھانا اک تھیلے وچ تیار رکھو، تے فون چارج رکھو۔ نیڑے دی اُچی تھاں دا رستہ پتہ کر لؤ۔",
-      "audio": null
+      "audio": "/voice/watch_pa.mp3"
     },
     "en": {
       "text": "Be careful: the river near you is higher than usual and may keep rising this week. Pack a bag with documents, medicines, water and dry food, and keep your phone charged. Find out the way to the nearest high ground.",
@@ -46,7 +46,7 @@
     },
     "pa": {
       "text": "خبردار: تہاڈے نیڑے دریا دا پانی تیزی نال چڑھ رہیا اے، تے اگلے کجھ دناں وچ تہاڈے علاقے وچ ہڑھ آ سکدا اے۔ اج ای کاغذ تے قیمتی سامان اُچی تھاں یا چھت تے رکھ دیو، تے ڈنگراں نوں اُچی تھاں تے لے جاؤ۔ ضلعی انتظامیہ آکھے تے فوراً نکلن لئی تیار رہو۔",
-      "audio": null
+      "audio": "/voice/warning_pa.mp3"
     },
     "en": {
       "text": "Warning: the river near you is rising fast, and your area may flood in the next few days. Today, move documents and valuables to a high shelf or the roof, and take your animals to higher ground. Be ready to leave when the district administration says so.",
@@ -64,7 +64,7 @@
     },
     "pa": {
       "text": "خطرہ! تہاڈے علاقے وچ بہت چھیتی ہڑھ آن والا اے۔ ہنے ای گھر والیاں، کاغذاں تے دوائیاں نال اُچی تھاں یا ریلیف کیمپ چلے جاؤ۔ بجلی تے گیس بند کر دیو۔ وگدے پانی وچوں پیدل یا گڈی تے نہ لنگھو۔ مدد لئی 1122 تے کال کرو۔",
-      "audio": null
+      "audio": "/voice/danger_pa.mp3"
     },
     "en": {
       "text": "Danger: your area is about to flood. Leave now for high ground or a relief camp with your family, documents and medicines. Switch off the electricity and gas. Do not walk or drive through flowing water. For help, call 1122.",
