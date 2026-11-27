@@ -1,4 +1,4 @@
-"""Make the Sailaab voice notes.
+"""Make the Khabardar voice notes.
 
 For every alert level (safe/watch/warning/danger) and language (ur/sd/pa/en):
   1. If a human recording exists in voice/recordings/ (e.g. warning_ur.m4a),

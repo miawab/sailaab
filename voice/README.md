@@ -1,6 +1,6 @@
 # voice/ (Part D)
 
-Sailaab sends a short voice note with every alert, in 4 languages, so people who can't read still get the warning.
+Khabardar sends a short voice note with every alert, in 4 languages, so people who can't read still get the warning.
 
 ## What's here
 | File | What it does |
