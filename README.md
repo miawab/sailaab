@@ -41,17 +41,22 @@ npx vercel dev                           # website + /api together (from repo ro
 
 | Name | Used for | License / cost |
 |---|---|---|
-| [Open-Meteo Flood API](https://open-meteo.com/en/docs/flood-api) (GloFAS v4) | 7-day river discharge forecast + 1984-today history | Free, no key, CC BY 4.0 |
+| [Open-Meteo Flood API](https://open-meteo.com/en/docs/flood-api) (GloFAS v4) | 7-day river discharge forecast + river history for the danger thresholds (data starts 1997) | Free, no key, CC BY 4.0 |
 | [Open-Meteo Elevation API](https://open-meteo.com/en/docs/elevation-api) (Copernicus DEM 90 m) | Ground height for "tap anywhere" risk | Free, no key, CC BY 4.0 |
 | [Google Open Buildings v3](https://sites.research.google/open-buildings/) | House footprints | CC BY 4.0 |
-| [UNOSAT 2022 Pakistan flood extents](https://data.humdata.org/) (HDX) | 2022 flooded area | Free, attribution |
-| [AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) | 3D terrain + house elevation | Free |
+| [UNOSAT 2022 Pakistan flood extents](https://data.humdata.org/dataset/satellite-detected-water-extents-between-01-and-29-august-2022-over-pakistan) (HDX, event FL20220808PAK, VIIRS 1 Jul-31 Aug 2022) | 2022 flooded area, `flooded_2022` on each house | Free, CC BY-SA |
+| [AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) | 3D terrain | Free |
+| [Copernicus DEM GLO-30](https://registry.opendata.aws/copernicus-dem/) (on AWS) | House ground height + height above the river (`data/`) | Free, no key, Copernicus licence (attribution) |
+| [OpenStreetMap](https://www.openstreetmap.org/) via [Overpass API](https://overpass-api.de/) | River lines in the showcase districts + national rivers (Kabul, Swat, Gilgit...) | Free, ODbL |
+| [Federal Flood Commission daily flood reports](https://ffc.gov.pk/) (Aug-Sep 2022) | Proof: real 2022 Kabul flows at Nowshera vs GloFAS | Public |
+| [Copernicus EWDS](https://ewds.climate.copernicus.eu/) (GloFAS forecast archive) | Proof: forecasts issued in Aug 2022 (script ready, needs a free account) | Free account, CC BY 4.0 |
+| geopandas, shapely, pyproj, rasterio, pandas, numpy, scipy, requests, s2sphere | Python data pipeline (`data/`) | BSD / MIT / Apache-2.0 |
 | [MapLibre GL JS](https://maplibre.org/) | The map | BSD-3 |
 | [OpenFreeMap](https://openfreemap.org/) (OpenStreetMap data) | Map tiles + fonts for our own Sailaab map style | Free, no key, ODbL (OSM) |
 | [Open-Meteo Weather + Ensemble API](https://open-meteo.com/en/docs/ensemble-api) (ECMWF) | 7-day rain forecast, soil wetness, and the 50 forecast runs behind the rain "% sure" | Free, no key, CC BY 4.0 |
 | [Open-Meteo Historical Forecast API](https://open-meteo.com/en/docs/historical-forecast-api) | Rain on the 2022 demo day | Free, no key, CC BY 4.0 |
 | [Open-Meteo Air Quality API](https://open-meteo.com/en/docs/air-quality-api) (Copernicus CAMS) | Smog (PM2.5) forecast for the Air mode | Free, no key, CC BY 4.0 |
-| [Natural Earth](https://www.naturalearthdata.com/) | Pakistan outline + major river lines | Public domain |
+| [Natural Earth](https://www.naturalearthdata.com/) | Pakistan outline + major river lines, place names for the national points | Public domain |
 | [Google Fonts](https://fonts.google.com/) (Inter, Inter Tight, Noto Nastaliq Urdu, Noto Naskh Arabic) | Type, incl. Urdu and Sindhi | OFL |
 | React, Vite | Website | MIT |
 | [edge-tts](https://github.com/rany2/edge-tts) | Urdu + English voice notes (fallback when no human recording) | Free, LGPL-3.0 |
