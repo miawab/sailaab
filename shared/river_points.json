@@ -1,0 +1,38 @@
+[
+  {
+    "id": "kabul_nowshera",
+    "name": "Kabul River at Nowshera",
+    "lat": 34.025,
+    "lon": 71.975,
+    "p90": 1155.1,
+    "p99": 2053.5,
+    "peak_2022": 1591.2
+  },
+  {
+    "id": "swat_charsadda",
+    "name": "Swat River near Charsadda",
+    "lat": 34.175,
+    "lon": 71.625,
+    "p90": 353.8,
+    "p99": 622.3,
+    "peak_2022": 452.9
+  },
+  {
+    "id": "indus_dadu",
+    "name": "Indus River at Dadu",
+    "lat": 26.725,
+    "lon": 67.825,
+    "p90": 8994.0,
+    "p99": 17257.4,
+    "peak_2022": 13488.6
+  },
+  {
+    "id": "johi_dadu",
+    "name": "Johi flood channel near Johi",
+    "lat": 26.775,
+    "lon": 67.625,
+    "p90": 11.6,
+    "p99": 305.1,
+    "peak_2022": 16480.6
+  }
+]
