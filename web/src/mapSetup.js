@@ -83,8 +83,8 @@ export function createMap(container) {
     container,
     style: { version: 8, sources: {}, layers: [{ id: 'bg', type: 'background', paint: { 'background-color': C.outside } }] },
     bounds: PK_BOUNDS,
-    fitBoundsOptions: { padding: 40 },
-    minZoom: 4,
+    fitBoundsOptions: { padding: window.innerWidth < 600 ? 16 : 40 },
+    minZoom: 3, // low enough for all of Pakistan to fit on a phone
     maxZoom: 18,
     // Keep people near Pakistan, with plenty of room to pan sideways at every zoom.
     maxBounds: [[35, 5], [105, 50]],
@@ -92,6 +92,9 @@ export function createMap(container) {
     pitchWithRotate: false,
     touchPitch: false,
     attributionControl: { compact: true },
+    // Speed: sharp but not 3x pixels on phones, and no label fade-in on every move.
+    pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+    fadeDuration: 0,
   });
   map.touchZoomRotate.disableRotation();
   map.setStyle(BASE_STYLE, { transformStyle: (_prev, next) => sailaabStyle(next) });
@@ -110,11 +113,6 @@ function maskOutside(pk) {
   return { type: 'Feature', geometry: { type: 'Polygon', coordinates: [world, ...holes] } };
 }
 
-// House colours: by risk level (normal), or grey turning water-blue (2022 replay).
-export const HOUSE_COLOR = {
-  risk: levelColorExpr(),
-  replay: ['case', ['boolean', ['feature-state', 'flooded'], false], '#1D4ED8', '#C3CBD9'],
-};
 
 // Which map layers each switch in the sidebar controls.
 export const LAYER_GROUPS = {
@@ -137,14 +135,14 @@ async function addLayers(map) {
   // Showcase district houses: flat footprints coloured by risk (or by water in the 2022 replay).
   map.addSource('houses', { type: 'geojson', data: empty, promoteId: 'id' });
   map.addLayer({ id: 'houses', type: 'fill', source: 'houses', minzoom: 12,
-    paint: { 'fill-color': HOUSE_COLOR.risk, 'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0.82] } }, firstLabel);
+    paint: { 'fill-color': '#94A3B8', 'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0.82] } }, firstLabel);
   map.addLayer({ id: 'houses-line', type: 'line', source: 'houses', minzoom: 14,
     paint: { 'line-color': '#FFFFFF', 'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 1] } }, firstLabel);
 
   // Smog: soft blobs of colour from the air-quality grid (Air mode only). The Pakistan fade sits on top.
   map.addSource('air', { type: 'geojson', data: empty });
   map.addLayer({ id: 'air', type: 'circle', source: 'air', layout: { visibility: 'none' },
-    paint: { 'circle-color': levelColorExpr(), 'circle-radius': z(4, 34, 7, 140, 10, 620), 'circle-blur': 1, 'circle-opacity': 0.32 } }, firstLabel);
+    paint: { 'circle-color': levelColorExpr(), 'circle-radius': z(4, 30, 7, 110, 9, 260), 'circle-blur': 1, 'circle-opacity': 0.32 }, maxzoom: 10 }, firstLabel);
 
   // Showcase rivers (detailed lines from Part B).
   map.addSource('rivers', { type: 'geojson', data: empty });
@@ -154,8 +152,9 @@ async function addLayers(map) {
     paint: { 'line-color': C.river, 'line-width': z(8, 1.5, 16, 6) } }, 'houses');
 
   try {
-    const [pk, rivers] = await Promise.all([
+    const [pk, pkLight, rivers] = await Promise.all([
       fetch('/geo/pakistan.geojson').then((r) => r.json()),
+      fetch('/geo/pakistan_simple.geojson').then((r) => r.json()), // 1/3 the corners, for fast inside tests
       fetch('/geo/rivers_pk.geojson').then((r) => r.json()),
     ]);
     const MAJOR = ['Indus', 'Jhelum', 'Chenab', 'Ravi', 'Sutlej', 'Beas'];
@@ -175,10 +174,10 @@ async function addLayers(map) {
     map.addLayer({ id: 'pk-border', type: 'line', source: 'pk',
       paint: { 'line-color': C.cobalt, 'line-width': z(4, 1, 10, 2), 'line-opacity': 0.55 } }, firstLabel);
 
-    map.pakistan = pk.features[0].geometry; // App uses this to know if the pin is inside Pakistan
+    map.pakistan = pkLight.geometry; // App uses this to know if the pin is inside Pakistan
 
     // Place names sit above the fade, and only names inside Pakistan show (so none get cut at the border).
-    const inside = ['within', { type: 'Feature', geometry: pk.features[0].geometry, properties: {} }];
+    const inside = ['within', pkLight];
     for (const id of ['label-city', 'label-town', 'label-village', 'label-street']) {
       const f = map.getFilter(id);
       map.setFilter(id, f ? ['all', f, inside] : inside);
@@ -204,9 +203,9 @@ async function addLayers(map) {
   // River forecast points (whole country).
   map.addSource('national', { type: 'geojson', data: empty });
   map.addLayer({ id: 'national-halo', type: 'circle', source: 'national', maxzoom: 12,
-    paint: { 'circle-color': levelColorExpr(), 'circle-radius': z(4, 9, 10, 18), 'circle-opacity': 0.18 } });
+    paint: { 'circle-color': levelColorExpr(), 'circle-radius': z(3, 4, 5, 8, 10, 18), 'circle-opacity': 0.18 } });
   map.addLayer({ id: 'national', type: 'circle', source: 'national', maxzoom: 12,
-    paint: { 'circle-color': levelColorExpr(), 'circle-radius': z(4, 4, 10, 7), 'circle-stroke-color': '#FFFFFF', 'circle-stroke-width': 2 } });
+    paint: { 'circle-color': levelColorExpr(), 'circle-radius': z(3, 2.2, 5, 3.6, 10, 7), 'circle-stroke-color': '#FFFFFF', 'circle-stroke-width': z(3, 1, 6, 2) } });
 
   // The last spot that was checked.
   map.addSource('checked', { type: 'geojson', data: empty });

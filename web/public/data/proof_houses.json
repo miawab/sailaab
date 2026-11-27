@@ -1,0 +1,24 @@
+{
+ "nowshera": {
+  "flagged": 6351,
+  "flaggedWet": 4847,
+  "rest": 18649,
+  "restWet": 8572,
+  "wet": 13419,
+  "wetFlagged": 4847,
+  "houses": 25000,
+  "flaggedHit": 76,
+  "restHit": 46
+ },
+ "dadu": {
+  "flagged": 4606,
+  "flaggedWet": 2867,
+  "rest": 14394,
+  "restWet": 5602,
+  "wet": 8469,
+  "wetFlagged": 2867,
+  "houses": 19000,
+  "flaggedHit": 62,
+  "restHit": 39
+ }
+}

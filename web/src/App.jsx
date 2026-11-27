@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { createMap, PK_BOUNDS, NOWSHERA, HOUSE_COLOR, LAYER_GROUPS } from './mapSetup.js';
+import { createMap, PK_BOUNDS, LAYER_GROUPS } from './mapSetup.js';
+import { AREAS, RIVER_POINTS, severity, riskColor, replayColor, floodShare, thresholds } from './houseRisk.js';
 import { LEVELS } from './levels.js';
 import { hazards, worst } from './hazards.js';
 import { airGrid, airSpot } from './air.js';
@@ -7,6 +8,7 @@ import AirPanel from './components/AirPanel.jsx';
 import Icon from './components/Icon.jsx';
 import Panel from './components/Panel.jsx';
 import Sidebar from './components/Sidebar.jsx';
+import DemoTour, { STEPS } from './components/DemoTour.jsx';
 
 const getJson = async (url) => {
   const r = await fetch(url);
@@ -16,6 +18,7 @@ const getJson = async (url) => {
 const isDesktop = () => window.matchMedia('(min-width: 821px)').matches;
 const SIDEBAR_W = 320;
 const PANEL_W = 400;
+const TOUR_W = 380;
 
 // Small, safe wrappers around localStorage (it can be blocked in private windows).
 const store = {
@@ -40,13 +43,17 @@ function inside([x, y], geom) {
   });
 }
 
-// 2022 replay: how far the flood has spread on a given day, 0 (in its banks) to 1 (the 2022 peak).
-// Only houses that REALLY flooded in 2022 (inside the UNOSAT flood map, `flooded_2022`) ever turn blue.
+// 2022 replay: only houses that REALLY flooded in 2022 (inside the UNOSAT flood map) ever turn blue.
 // They go lowest-first as the river climbs, so by the peak the map matches what really happened.
-function floodShare(discharge, t) {
-  const f = (discharge - t.p99) / (t.peak_2022 - t.p99);
-  return Math.max(0, Math.min(1, f));
+// For each point: the heights of its flooded houses, sorted, so we can count how many are under water.
+function wetHeights(features) {
+  const by = {};
+  for (const f of features) if (f.properties.f) (by[f.properties.p] ??= []).push(f.properties.h);
+  for (const k in by) by[k].sort((a, b) => a - b);
+  return by;
 }
+const countUpTo = (sorted, x) => { let lo = 0, hi = sorted.length; while (lo < hi) { const m = (lo + hi) >> 1; if (sorted[m] <= x) lo = m + 1; else hi = m; } return lo; };
+const inBox = ([x, y], [w, s, e, n], pad = 0.3) => x > w - pad && x < e + pad && y > s - pad && y < n + pad;
 
 const pt = (c, props = {}) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: c }, properties: props });
 const EMPTY = { type: 'FeatureCollection', features: [] };
@@ -55,7 +62,10 @@ export default function App() {
   const mapEl = useRef(null);
   const mapRef = useRef(null);
   const selectedRef = useRef(null);
-  const housesRef = useRef(null);
+  const housesRef = useRef({ type: 'FeatureCollection', features: [] }); // grows as areas load
+  const loadedAreas = useRef({}); // area -> 'loading' | 'done'
+  const wetRef = useRef({});
+  const autoPlay = useRef(false); // the demo starts replays by itself
   const pointsRef = useRef(null);
   const nationalLevels = useRef({});
 
@@ -72,17 +82,23 @@ export default function App() {
   const [sideOpen, setSideOpen] = useState(isDesktop);
   const [mode, setMode] = useState('now');
   const [lang, setLangState] = useState(() => store.get('sailaab.lang') ?? 'ur');
-  const [demo, setDemo] = useState(() => new URLSearchParams(location.search).get('demo') !== '0');
+  // The guided demo (null = normal live app). ?demo=1 in the link opens it straight away.
+  const [tour, setTour] = useState(() => (new URLSearchParams(location.search).get('demo') === '1' ? 0 : null));
+  const [proofRiver, setProofRiver] = useState(null);
+  const [proofHouses, setProofHouses] = useState(null);
   const [layers, setLayers] = useState({ rivers: true, points: true, flood2022: false, houses: true, provinces: true });
   const [home, setHomeState] = useState(() => store.get('sailaab.home'));
   const [homeRisk, setHomeRisk] = useState(null);
 
-  const [replay, setReplay] = useState(null);
+  const [sev, setSev] = useState({}); // river point -> worst severity in the next 7 days
+  const [housesTick, setHousesTick] = useState(0);
+  const [area, setArea] = useState('nowshera');
+  const [replay, setReplay] = useState(null); // { area, main, points: { id: replay data }, days, thresholds }
   const [day, setDay] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [underwater, setUnderwater] = useState(0);
 
-  const q = demo || mode === 'past' ? '&demo=1' : '';
+  const q = tour != null ? '&demo=1' : '';
   const today = q ? '2022-08-25' : new Date().toISOString().slice(0, 10);
   const setLang = (l) => { setLangState(l); store.set('sailaab.lang', l); };
   const say = (msg) => { setToast(msg); setTimeout(() => setToast(null), 3500); };
@@ -92,6 +108,7 @@ export default function App() {
     setReady(false); // a fresh map is not ready yet (matters on hot reload)
     const map = createMap(mapEl.current);
     mapRef.current = map;
+    if (import.meta.env.DEV) window.sailaabMap = map; // for poking at it in the console
     const where = () => { const c = map.getCenter(); setInPk(inside([c.lng, c.lat], map.pakistan)); };
     map.on('sailaab:ready', () => { setReady(true); where(); });
     // Only a move by the person clears the last answer; panel/sidebar nudges don't.
@@ -106,18 +123,15 @@ export default function App() {
     const map = mapRef.current;
     let off = false;
     (async () => {
-      const [points, rivers, houses, flood] = await Promise.all([
+      const [points, rivers, flood] = await Promise.all([
         getJson('/data/national_points.geojson'),
         getJson('/data/rivers.geojson'),
-        getJson('/data/houses.geojson'),
         getJson('/data/flood2022.geojson'),
       ]);
       if (off) return;
       map.getSource('rivers')?.setData(rivers);
       map.getSource('flood2022')?.setData(flood);
-      housesRef.current = houses;
       pointsRef.current = points;
-      map.getSource('houses')?.setData(houses);
 
       try {
         const nat = await getJson(`/api/national?x=1${q}`);
@@ -127,16 +141,44 @@ export default function App() {
       for (const f of points.features) f.properties.level = nationalLevels.current[f.properties.id] ?? null;
       map.getSource('national')?.setData(points);
 
-      // TODO(Part C): one call per house is fine for the mock; real data needs a batch endpoint.
-      if (houses.features.length <= 400) {
-        const res = await Promise.allSettled(houses.features.map((f) => getJson(`/api/house?id=${f.properties.id}${q}`)));
-        if (off) return;
-        res.forEach((r, i) => { if (r.status === 'fulfilled') houses.features[i].properties.level = r.value.level; });
-        map.getSource('houses')?.setData(houses);
-      }
+      // Houses: one forecast per river point, then the map colours every house itself.
+      const ids = Object.keys(RIVER_POINTS);
+      const res = await Promise.allSettled(ids.map((id) => getJson(`/api/forecast?point=${id}${q}`)));
+      if (off) return;
+      const s = {};
+      res.forEach((r, i) => {
+        if (r.status === 'fulfilled') s[ids[i]] = Math.max(...r.value.days.map((d) => severity(d.discharge, RIVER_POINTS[ids[i]])));
+      });
+      setSev(s);
     })().catch((e) => console.warn('data', e));
     return () => { off = true; };
   }, [ready, q]);
+
+  // Houses load only near a showcase area (they're big), when you zoom in there or open its replay.
+  const loadArea = useCallback(async (key) => {
+    if (loadedAreas.current[key]) return;
+    loadedAreas.current[key] = 'loading';
+    try {
+      const fc = await getJson(AREAS[key].file);
+      housesRef.current.features.push(...fc.features);
+      wetRef.current = wetHeights(housesRef.current.features);
+      mapRef.current.getSource('houses')?.setData(housesRef.current);
+      loadedAreas.current[key] = 'done';
+      setHousesTick((t) => t + 1);
+    } catch { loadedAreas.current[key] = null; }
+  }, []);
+  useEffect(() => {
+    if (!ready) return;
+    const map = mapRef.current;
+    const near = () => {
+      if (map.getZoom() < 9.5) return;
+      const c = map.getCenter();
+      for (const k in AREAS) if (inBox([c.lng, c.lat], AREAS[k].bbox)) loadArea(k);
+    };
+    near();
+    map.on('moveend', near);
+    return () => map.off('moveend', near);
+  }, [ready, loadArea]);
 
   // ---------- layers on/off ----------
   useEffect(() => {
@@ -183,65 +225,92 @@ export default function App() {
 
   // ---------- 2022 replay ----------
   useEffect(() => {
-    if (mode !== 'past' || replay) return;
-    getJson('/api/replay').then((r) => {
-      setReplay(r);
+    if (mode !== 'past' || replay?.area === area) return;
+    const A = AREAS[area];
+    loadArea(area);
+    Promise.all(A.points.map((id) => getJson(`/api/replay?point=${id}`))).then((rs) => {
+      const points = Object.fromEntries(rs.map((r) => [r.point, r]));
+      const main = points[A.main];
+      setReplay({ area, main: A.main, points, days: main.days, thresholds: main.thresholds });
       // start a few days before the river leaves its banks
-      const first = r.days.findIndex((d) => d.level === 'warning');
+      const first = main.days.findIndex((d) => d.level === 'warning');
       setDay(Math.max(0, first - 4));
+      if (autoPlay.current) setPlaying(true);
     }).catch(() => say('Could not load the 2022 data'));
-  }, [mode, replay]);
+  }, [mode, replay, area, loadArea]);
 
   useEffect(() => {
-    if (!playing || !replay) return;
+    if (!playing || !replay || replay.area !== area) return;
     const t = setInterval(() => setDay((d) => {
       if (d >= replay.days.length - 1) { setPlaying(false); return d; }
       return d + 1;
     }), 260);
     return () => clearInterval(t);
-  }, [playing, replay]);
+  }, [playing, replay, area]);
 
   // Paint the map for the replay day (or put it back to normal).
   useEffect(() => {
     if (!ready) return;
     const map = mapRef.current;
-    const houses = housesRef.current;
-    if (mode !== 'past' || !replay || !houses) {
-      map.setPaintProperty('houses', 'fill-color', HOUSE_COLOR.risk);
-      for (const f of houses?.features ?? []) map.setFeatureState({ source: 'houses', id: f.properties.id }, { flooded: false });
+    if (mode !== 'past' || !replay) {
+      map.setPaintProperty('houses', 'fill-color', riskColor(sev));
       if (pointsRef.current) {
         for (const f of pointsRef.current.features) f.properties.level = nationalLevels.current[f.properties.id] ?? null;
         map.getSource('national')?.setData(pointsRef.current);
       }
       return;
     }
-    const d = replay.days[day];
-    const share = floodShare(d.discharge, replay.thresholds);
-    const wetHouses = houses.features.filter((f) => f.properties.flooded_2022);
-    const maxH = Math.max(0.5, ...wetHouses.map((f) => f.properties.height_above_river_m ?? 0));
+    // how high the water stands today at each point, in "height above river" metres
+    const cut = {};
     let n = 0;
-    map.setPaintProperty('houses', 'fill-color', HOUSE_COLOR.replay);
-    for (const f of houses.features) {
-      const wet = share > 0 && !!f.properties.flooded_2022 && (f.properties.height_above_river_m ?? 0) <= share * maxH;
-      if (wet) n++;
-      map.setFeatureState({ source: 'houses', id: f.properties.id }, { flooded: wet });
+    for (const [id, r] of Object.entries(replay.points)) {
+      // that share of the really-flooded houses goes under, lowest first
+      const wet = wetRef.current[id] ?? [];
+      const share = floodShare(r.days[day]?.discharge ?? 0, RIVER_POINTS[id]);
+      const k = Math.floor(share * wet.length);
+      cut[id] = k > 0 ? wet[k - 1] : -1;
+      n += countUpTo(wet, cut[id]);
     }
+    map.setPaintProperty('houses', 'fill-color', replayColor(cut));
     setUnderwater(n);
-    // the 2022 flood area fades in once the river passes the danger line
-    const dangerLine = replay.thresholds.peak_2022 * 0.9;
-    map.setPaintProperty('flood2022', 'fill-opacity', layers.flood2022 || d.discharge >= dangerLine ? 0.32 : 0);
+    // the 2022 flood area fades in once the main river passes the danger line
+    const d = replay.days[day];
+    map.setPaintProperty('flood2022', 'fill-opacity', layers.flood2022 || d.discharge >= thresholds(RIVER_POINTS[replay.main]).danger ? 0.32 : 0);
     if (pointsRef.current) {
-      for (const f of pointsRef.current.features) f.properties.level = f.properties.id === replay.point ? d.level : null;
+      for (const f of pointsRef.current.features) f.properties.level = f.properties.id === replay.main ? d.level : null;
       map.getSource('national')?.setData(pointsRef.current);
     }
-  }, [ready, mode, replay, day, layers.flood2022]);
+  }, [ready, mode, replay, day, layers.flood2022, sev, housesTick]);
 
   // ---------- keep the map centre clear of the sidebar + panel ----------
-  const sbW = sideOpen && isDesktop() ? SIDEBAR_W + 16 : 0;
-  const pnW = result && isDesktop() ? PANEL_W + 16 : 0;
+  const desk = isDesktop();
+  const sbW = desk ? (tour != null ? TOUR_W + 16 : sideOpen ? SIDEBAR_W + 16 : 0) : 0;
+  const pnW = result && desk ? PANEL_W + 16 : 0;
+  const pb = tour != null && !desk ? Math.round(window.innerHeight * 0.46) : 0;
   useEffect(() => {
-    mapRef.current?.easeTo({ padding: { left: sbW, right: pnW, top: 0, bottom: 0 }, duration: 400 });
-  }, [sbW, pnW]);
+    mapRef.current?.easeTo({ padding: { left: sbW, right: pnW, top: 0, bottom: pb }, duration: 400 });
+  }, [sbW, pnW, pb]);
+
+  // ---------- the demo tour: each step points the map somewhere ----------
+  useEffect(() => {
+    if (tour == null) return;
+    const S = STEPS[tour];
+    setMode(S.mode);
+    if (S.area) setArea(S.area);
+    autoPlay.current = S.key === 'dadu' || S.key === 'nowshera';
+    setPlaying(autoPlay.current && replay?.area === (S.area ?? area));
+    setLayers((l) => ({ ...l, flood2022: !!S.flood, houses: true, points: true }));
+    const map = mapRef.current;
+    if (!map) return;
+    setPinLevel(null);
+    if (S.view === 'pakistan') map.fitBounds(PK_BOUNDS, { padding: isDesktop() ? 40 : 16, duration: 1800 });
+    else { loadArea(S.view); map.flyTo({ ...AREAS[S.view].view, duration: 2600 }); }
+  }, [tour, ready, loadArea]);
+  useEffect(() => {
+    if (tour == null || proofRiver) return;
+    getJson('/data/proof_kabul_nowshera.json').then(setProofRiver).catch(() => {});
+    getJson('/data/proof_houses.json').then(setProofHouses).catch(() => {});
+  }, [tour, proofRiver]);
 
   // ---------- the one main action: is the spot under the pin safe? ----------
   const check = useCallback(async () => {
@@ -256,7 +325,14 @@ export default function App() {
       } catch { setResult({ kind: 'air', status: 'error', coords: [c.lng, c.lat] }); }
       return;
     }
-    const house = map.getZoom() >= 13 ? map.queryRenderedFeatures(map.project(c), { layers: ['houses'] })[0] : null;
+    // the house under the pin, or the nearest one within a finger's width
+    let house = null;
+    if (map.getZoom() >= 13) {
+      const p = map.project(c);
+      const near = map.queryRenderedFeatures([[p.x - 16, p.y - 16], [p.x + 16, p.y + 16]], { layers: ['houses'] });
+      const d = (f) => { const [x, y] = f.geometry.type === 'Polygon' ? f.geometry.coordinates[0][0] : f.geometry.coordinates[0][0][0]; const q = map.project([x, y]); return (q.x - p.x) ** 2 + (q.y - p.y) ** 2; };
+      house = near.sort((a, b) => d(a) - d(b))[0] ?? null;
+    }
 
     if (selectedRef.current) map.setFeatureState({ source: 'houses', id: selectedRef.current }, { selected: false });
     selectedRef.current = house ? house.properties.id : null;
@@ -303,8 +379,7 @@ export default function App() {
     );
   };
   const zoom = (d) => mapRef.current.easeTo({ zoom: mapRef.current.getZoom() + d, duration: 300 });
-  const allPakistan = () => { setPinLevel(null); mapRef.current.fitBounds(PK_BOUNDS, { padding: 40, duration: 1500 }); };
-  const goNowshera = () => { setPinLevel(null); mapRef.current.flyTo({ ...NOWSHERA, duration: 3500 }); };
+  const allPakistan = () => { setPinLevel(null); mapRef.current.fitBounds(PK_BOUNDS, { padding: isDesktop() ? 40 : 16, duration: 1500 }); };
 
   const closePanel = () => {
     setResult(null);
@@ -314,11 +389,19 @@ export default function App() {
     selectedRef.current = null;
   };
 
+  const startTour = () => { closePanel(); setSideOpen(false); setTour(0); };
+  const exitTour = () => {
+    closePanel(); setTour(null); setPlaying(false); setMode('now');
+    setLayers((l) => ({ ...l, flood2022: false }));
+    if (isDesktop()) setSideOpen(true);
+    allPakistan();
+  };
+  const goStep = (i) => { if (i < 0 || i >= STEPS.length) return; closePanel(); setTour(i); };
+
   const changeMode = (m) => {
     setMode(m);
     setPlaying(false);
     closePanel();
-    if (m === 'past') goNowshera();
     if (m === 'air') allPakistan();
   };
 
@@ -327,19 +410,27 @@ export default function App() {
   const checkUr = mode === 'air' ? 'یہاں ہوا کیسی ہے؟' : 'کیا یہاں محفوظ ہے؟';
 
   return (
-    <div className="app" style={{ '--sb': `${sbW}px`, '--pn': `${pnW}px` }}>
+    <div className={`app ${tour != null ? "touring" : ""}`} style={{ '--sb': `${sbW}px`, '--pn': `${pnW}px` }}>
       <div ref={mapEl} className="map" />
 
       <Sidebar
-        open={sideOpen} setOpen={setSideOpen}
+        open={sideOpen && tour == null} setOpen={setSideOpen}
         mode={mode} setMode={changeMode}
         layers={layers} toggleLayer={(k) => setLayers((l) => ({ ...l, [k]: !l[k] }))}
         home={home} homeLevel={homeRisk?.level} setHome={saveHome} clearHome={clearHome} goHome={goHome}
-        lang={lang} setLang={setLang} demo={demo} setDemo={setDemo}
-        replayProps={{ replay, day, setDay, playing, setPlaying, underwater, totalHouses: housesRef.current?.features.length ?? 0 }}
+        lang={lang} setLang={setLang} startTour={startTour}
       />
 
-      {!sideOpen && (
+      {tour != null && (
+        <DemoTour
+          step={tour} go={goStep} onExit={exitTour} onCheck={check}
+          proofRiver={proofRiver} proofHouses={proofHouses} lang={lang} setLang={setLang}
+          replayProps={{ replay: replay?.area === area ? replay : null, day, setDay, playing, setPlaying, underwater,
+            totalHouses: housesRef.current.features.filter((f) => AREAS[area].points.includes(f.properties.p)).length }}
+        />
+      )}
+
+      {!sideOpen && tour == null && (
         <button className="menu-btn" onClick={() => setSideOpen(true)} aria-label="Open menu">
           <Icon name="menu" size={18} />
           <span className="brand-mark">سیلاب</span>
@@ -348,7 +439,7 @@ export default function App() {
       )}
 
       {/* the pin that points where you're looking */}
-      {mode !== "past" && <div className={`pin ${moving ? "lifted" : ""}`} style={{ "--pin": pinColor }}>
+      {mode !== "past" && (tour == null || ["what", "house"].includes(STEPS[tour].key)) && <div className={`pin ${moving ? "lifted" : ""}`} style={{ "--pin": pinColor }}>
         <div className="pin-head">
           {!inPk ? <Icon name="x" size={18} stroke={2.6} />
             : pinLevel ? <Icon name={LEVELS[pinLevel].icon} size={18} stroke={2.4} />
@@ -370,7 +461,7 @@ export default function App() {
       </div>
 
       {/* the main button */}
-      {mode !== 'past' && (
+      {mode !== 'past' && (tour == null || (desk && ['what', 'house'].includes(STEPS[tour].key))) && (
         <button className={`check ${inPk ? '' : 'off'}`} onClick={check} disabled={!ready || !inPk || moving}>
           <span className="check-icon"><Icon name={!inPk ? 'x' : mode === 'air' ? 'wind' : 'drop'} size={22} /></span>
           <span className="check-text">
