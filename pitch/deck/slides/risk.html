@@ -1,26 +1,28 @@
 <section id="risk" class="dark">
-<p class="eyebrow">THE RISK SCORE</p>
+<p class="label">The risk score</p>
 <h2 class="title">How we score a house</h2>
-<p class="formula in" style="--i:0">Risk score <span class="formula-x">=</span> river severity <span class="formula-x">×</span> house exposure <span class="formula-x">×</span> 100</p>
-<div class="risk-cols">
-<div class="in" style="--i:1">
-<p class="col-head">River severity: the 7-day forecast against 38 years of history (1984–2021)</p>
-<table class="risk-table">
-<tr><th style="width:24%">Level</th><th>When the forecast river flow is…</th></tr>
-<tr><td class="lv-safe">Safe</td><td>below the 90th percentile</td></tr>
-<tr><td class="lv-watch">Watch</td><td>between the 90th and 99th percentile</td></tr>
-<tr><td class="lv-warning">Warning</td><td>above the 99th percentile</td></tr>
-<tr><td class="lv-danger">Danger</td><td>above the 2022 peak</td></tr>
-</table>
-</div>
-<div class="in" style="--i:2">
-<p class="col-head">House exposure, 0 to 1</p>
-<ul class="plain-list">
-<li>Height above the river</li>
-<li>Distance to the river</li>
-<li>Flooded in 2022 (satellite map)</li>
+<p class="formula in" style="--i:0">house score <b>=</b> river severity <b>×</b> exposure <b>×</b> 100</p>
+<div class="risk in" style="--i:1">
+<div>
+<p class="col-head">River severity</p>
+<p class="col-sub">This week’s forecast against the river’s own history (1997 to 2021)</p>
+<ul class="rows">
+<li><span class="name"><i class="dot safe"></i>Safe</span><span class="val">below its 90th percentile</span></li>
+<li><span class="name"><i class="dot watch"></i>Watch</span><span class="val">90th to 99th percentile</span></li>
+<li><span class="name"><i class="dot warning"></i>Warning</span><span class="val">above its 99th percentile</span></li>
+<li><span class="name"><i class="dot danger"></i>Danger</span><span class="val">90% of its 2022 peak or more</span></li>
 </ul>
 </div>
+<div>
+<p class="col-head">House exposure, 0 to 1</p>
+<p class="col-sub">From the house’s own data</p>
+<ul class="rows weights">
+<li><span class="name">Height above the river</span><span class="val">50%</span></li>
+<li><span class="name">Distance to the river</span><span class="val">30%</span></li>
+<li><span class="name">Flooded in 2022</span><span class="val">20%</span></li>
+</ul>
+<p class="bands">Score 25+ watch · 50+ warning · 75+ danger</p>
 </div>
-<aside>Judges will ask this, so here it is plainly. First, how bad is the river? We take the 7-day forecast and compare it with the same river's own history from 1984 to 2021. Above its normal 90 percent level is Watch, above 99 percent is Warning, above the 2022 peak is Danger. Second, how exposed is this house? A house that sits low, close to the river, and flooded in 2022 is very exposed. Multiply the two and you get a score from 0 to 100. [Check the exact exposure weights with Zarrar before the pitch.]</aside>
+</div>
+<aside>Judges will ask this, so here it is plainly. First, how bad is the river? We take this week's forecast and compare it with the same river's own history from 1997 to 2021. Above its normal 90 percent level is Watch, above 99 percent is Warning, and 90 percent of the 2022 peak or more is Danger. Second, how exposed is this house? Half of it is how low the house sits above the river, 30 percent how close it is, and 20 percent whether it flooded in 2022. Multiply the two and you get a score from 0 to 100: 25 and up is watch, 50 warning, 75 danger. So when the river rises, the low house by the bank turns red first. Honest limits: the 50, 30, 20 weights are our choice, checked against 2022, not fitted on many floods; and GloFAS covers major rivers only, not flash floods or city drains.</aside>
 </section>

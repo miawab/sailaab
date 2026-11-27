@@ -1,28 +1,31 @@
 <section id="demo" class="dark">
-<p class="eyebrow">LIVE DEMO · MOCKUP UNTIL THE REAL SCREENSHOT</p>
-<h2 class="title">Nowshera, house by house</h2>
-<div class="demo-row">
-<div class="demo-map in" style="--i:0">
-<svg aria-label="Map mockup: a river runs across the town; houses near it are orange and red, houses further away are yellow and green, and one selected house is outlined" width="1000" height="520" viewBox="0 0 1000 520"><rect width="1000" height="520" fill="#13263A"/><path d="M0 330 C 200 280, 350 400, 520 350 S 820 280, 1000 320" fill="none" stroke="#3FA7C9" stroke-width="36" opacity="0.85"/><g fill="#4CC38A"><rect x="80" y="60" width="34" height="26"/><rect x="160" y="95" width="34" height="26"/><rect x="260" y="55" width="34" height="26"/><rect x="360" y="105" width="34" height="26"/><rect x="470" y="70" width="34" height="26"/><rect x="600" y="45" width="34" height="26"/><rect x="720" y="95" width="34" height="26"/><rect x="840" y="60" width="34" height="26"/><rect x="900" y="130" width="34" height="26"/><rect x="100" y="470" width="34" height="26"/><rect x="700" y="475" width="34" height="26"/><rect x="880" y="465" width="34" height="26"/></g><g fill="#F2C94C"><rect x="120" y="175" width="34" height="26"/><rect x="240" y="200" width="34" height="26"/><rect x="400" y="185" width="34" height="26"/><rect x="650" y="170" width="34" height="26"/><rect x="780" y="205" width="34" height="26"/><rect x="300" y="475" width="34" height="26"/><rect x="500" y="465" width="34" height="26"/></g><g fill="#F2994A"><rect x="60" y="255" width="34" height="26"/><rect x="300" y="255" width="34" height="26"/><rect x="700" y="240" width="34" height="26"/><rect x="860" y="250" width="34" height="26"/></g><g fill="#EB5757"><rect x="180" y="385" width="34" height="26"/><rect x="380" y="410" width="34" height="26"/><rect x="620" y="395" width="34" height="26"/><rect x="760" y="380" width="34" height="26"/><rect x="920" y="390" width="34" height="26"/></g><rect x="545" y="270" width="40" height="30" fill="#F2994A" stroke="#FBFAF6" stroke-width="5"/></svg>
-<div class="legend">
-<div class="legend-item"><x-shape kind="ellipse" class="legend-dot" style="background:#4CC38A"></x-shape><p class="legend-text">Safe</p></div>
-<div class="legend-item"><x-shape kind="ellipse" class="legend-dot" style="background:#F2C94C"></x-shape><p class="legend-text">Watch</p></div>
-<div class="legend-item"><x-shape kind="ellipse" class="legend-dot" style="background:#F2994A"></x-shape><p class="legend-text">Warning</p></div>
-<div class="legend-item"><x-shape kind="ellipse" class="legend-dot" style="background:#EB5757"></x-shape><p class="legend-text">Danger</p></div>
-</div>
-</div>
-<div class="house-card in" style="--i:1">
-<p class="badge">WARNING</p>
-<h3 class="card-head">High risk in 3 days</h3>
+<p class="label">Live demo · Dadu, Sindh</p>
+<h2 class="title">Tap a house, get its warning</h2>
+<div class="demo">
+<ol class="steps in" style="--i:0">
+<li><span><b>All of Pakistan</b>, 235 river points coloured by this week’s forecast</span></li>
+<li><span><b>Tap any spot</b> to see its risk from the river, rain and hills</span></li>
+<li><span><b>Zoom into Dadu</b>, where 19,000 houses each have their own level</span></li>
+<li><span><b>Replay 2022</b> and watch the Johi channel rise day by day</span></li>
+<li><span><b>Tap one house</b> for its card and the voice note in Urdu</span></li>
+</ol>
+<div class="demo-side in" style="--i:1">
+<div class="house">
+<p class="house-where">House h_038723 · Dadu, Sindh</p>
+<div class="house-level"><i class="dot danger"></i><p class="house-level-name">Danger</p></div>
+<p class="house-when">From 27 Aug 2022, in 2 days</p>
 <ul class="reasons">
-<li>2.1 m above the river</li>
-<li>180 m from the Kabul River</li>
+<li>At about the same level as the river</li>
+<li>30 m from the Johi flood channel</li>
 <li>Flooded in 2022</li>
 </ul>
-<p class="chart-label">Kabul River, next 7 days</p>
-<svg aria-label="Seven-day river chart: flow rises each day and crosses the danger line on day 4" width="552" height="120" viewBox="0 0 552 120"><line x1="0" y1="40" x2="552" y2="40" stroke="#B5541A" stroke-width="3" stroke-dasharray="10 8"/><rect x="8" y="90" width="56" height="30" fill="#3FA7C9"/><rect x="86" y="78" width="56" height="42" fill="#3FA7C9"/><rect x="164" y="60" width="56" height="60" fill="#3FA7C9"/><rect x="242" y="30" width="56" height="90" fill="#E8792B"/><rect x="320" y="14" width="56" height="106" fill="#E8792B"/><rect x="398" y="22" width="56" height="98" fill="#E8792B"/><rect x="476" y="48" width="56" height="72" fill="#3FA7C9"/></svg>
-<div class="play-row"><x-icon name="Play" class="play-icon"></x-icon><p class="play-text">Play voice note · Urdu</p></div>
+<p class="bars-label">Johi flood channel, next 7 days</p>
+<svg class="chart" aria-label="Seven bars, 25 to 31 August 2022: warning, warning, then danger on the 27th and 28th, then warning again" width="640" height="148" viewBox="0 0 640 148"><g><rect x="0" y="84" width="64" height="36" rx="4" fill="#e8792b"/><rect x="96" y="72" width="64" height="48" rx="4" fill="#e8792b"/><rect x="192" y="0" width="64" height="120" rx="4" fill="#e5484d"/><rect x="288" y="32" width="64" height="88" rx="4" fill="#e5484d"/><rect x="384" y="72" width="64" height="48" rx="4" fill="#e8792b"/><rect x="480" y="92" width="64" height="28" rx="4" fill="#e8792b"/><rect x="576" y="104" width="64" height="16" rx="4" fill="#e8792b"/></g><g fill="#7b7266" font-size="20" text-anchor="middle"><text x="32" y="146">25</text><text x="128" y="146">26</text><text x="224" y="146">27</text><text x="320" y="146">28</text><text x="416" y="146">29</text><text x="512" y="146">30</text><text x="608" y="146">31</text></g></svg>
+<div class="voice-row"><div class="play"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3.5v13l11-6.5z" fill="#11141c"/></svg></div><p class="voice-text">Voice note · Urdu · 20 s</p></div>
+<div class="langs"><p class="lang ur on" lang="ur">اردو</p><p class="lang sd" lang="sd">سنڌي</p><p class="lang ur" lang="pa">پنجابی</p><p class="lang">EN</p></div>
+</div>
+<p class="card-note">The real reply from our API in demo mode, with today set to 25 Aug 2022</p>
 </div>
 </div>
-<aside>Demo order, about 60 seconds. 1. All of Pakistan in 3D, rivers glowing. Tap a random village in Punjab: its risk shows at once. 2. Fly into Nowshera: every house in 3D. 3. Replay 2022: press play, Aug 20 to Sep 2, the river graph climbs and houses turn red. 4. Tap one house: WARNING, high risk in 3 days, and why. 5. Play the Urdu voice note. Use demo mode (?demo=1) so the rivers show 2022 levels; in November the real rivers are calm. Backup: if the venue wifi fails, play the screen recording from the demo video. [This slide is a mockup. Replace it with Ibrahim's real screenshot on Fri Nov 27.]</aside>
+<aside>Demo, about 60 seconds. 1. All of Pakistan, rivers coloured by this week's forecast. 2. Tap any spot: its risk shows at once. 3. Zoom into Dadu: every house has its own level. 4. Replay 2022 on the Johi channel: press play and the river climbs. 5. Tap a house by the channel: Danger, from 27 August, and why. Play the Urdu voice note. The card on this slide is the real answer our API gives for that house in demo mode, where today is 25 August 2022, because in November the real rivers are calm. Backup if the wifi fails: play the screen recording from the demo video.</aside>
 </section>

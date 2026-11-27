@@ -1,21 +1,29 @@
 <section id="how" class="light foot">
-<p class="eyebrow">HOW IT WORKS</p>
-<h2 class="title">Free global data in, a warning for one house out</h2>
-<div class="flow">
-<div class="flow-col" style="width:500px">
-<div class="node in" style="--i:0"><p class="node-name">River forecast</p><p class="node-desc">GloFAS via Open-Meteo, 7 days ahead</p></div>
-<div class="node in" style="--i:1"><p class="node-name">Every building</p><p class="node-desc">Google Open Buildings footprints</p></div>
-<div class="node in" style="--i:2"><p class="node-name">The 2022 flood</p><p class="node-desc">UNOSAT satellite flood extent</p></div>
-<div class="node in" style="--i:3"><p class="node-name">Ground height</p><p class="node-desc">AWS terrain tiles</p></div>
+<p class="label">How it works</p>
+<h2 class="title">Free global data in, one house’s warning out</h2>
+<div class="flow in" style="--i:0">
+<div>
+<p class="flow-head">Data</p>
+<ul class="flow-list">
+<li><p class="flow-name">River forecast</p><p class="flow-desc">GloFAS v4 via Open-Meteo, 7 days ahead</p></li>
+<li><p class="flow-name">Every building</p><p class="flow-desc">Google Open Buildings v3</p></li>
+<li><p class="flow-name">The 2022 flood</p><p class="flow-desc">UNOSAT satellite flood map</p></li>
+<li><p class="flow-name">Ground height</p><p class="flow-desc">Copernicus DEM, 30 m</p></li>
+<li><p class="flow-name">Rivers, rain and hills</p><p class="flow-desc">OpenStreetMap, Open-Meteo weather and terrain</p></li>
+</ul>
 </div>
-<x-shape kind="arrow-right" class="arrow"></x-shape>
-<div class="engine in" style="width:420px; --i:4"><h3 class="engine-name">Risk engine</h3><p class="engine-desc">Compares the river forecast with each house’s height, distance and flood history.</p></div>
-<x-shape kind="arrow-right" class="arrow"></x-shape>
-<div class="flow-col" style="width:440px">
-<div class="node in" style="--i:5"><p class="node-name">3D map</p><p class="node-desc">Every river and house coloured by risk</p></div>
-<div class="node in" style="--i:6"><p class="node-name">Voice alert</p><p class="node-desc">Under 20 seconds, in 4 languages</p></div>
+<div class="chev"><svg width="24" height="40" viewBox="0 0 24 40" aria-hidden="true"><path d="M4 4l16 16L4 36" fill="none" stroke="#7b7266" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="engine"><h3 class="engine-name">Risk engine</h3><p class="engine-desc">Compares this week’s river forecast with the river’s own history, then with each house’s height, distance and 2022 flooding</p></div>
+<div class="chev"><svg width="24" height="40" viewBox="0 0 24 40" aria-hidden="true"><path d="M4 4l16 16L4 36" fill="none" stroke="#7b7266" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div>
+<p class="flow-head">Out</p>
+<ul class="flow-list">
+<li><p class="flow-name">The map</p><p class="flow-desc">Rivers and houses coloured by level</p></li>
+<li><p class="flow-name">The house card</p><p class="flow-desc">Level, reasons, 7-day chart</p></li>
+<li><p class="flow-name">The voice note</p><p class="flow-desc">20 s or less, 4 languages</p></li>
+</ul>
 </div>
 </div>
-<p class="source">All sources are free and open. No paid APIs. The full list is in the project README.</p>
-<aside>Everything we use is free, global data. The river forecast comes from GloFAS, the global flood forecasting system, through Open-Meteo. The buildings are Google's Open Buildings. The 2022 flood is UNOSAT's satellite map, and the ground height comes from terrain tiles. Our risk engine joins them, and the result goes to the map and the voice alert. Because the data covers the whole country, the same pipeline works for any district.</aside>
+<p class="source">All free and open, no paid APIs and no keys. The full list with licences is in the project README</p>
+<aside>Everything we use is free, global data. The river forecast comes from GloFAS, the global flood forecasting system, through Open-Meteo. The buildings are Google's Open Buildings. The 2022 flood is UNOSAT's satellite map, and the ground height is the Copernicus 30-metre elevation model. Our risk engine joins them, and the result goes to the map, the house card and the voice note. Because the data covers the whole country, the same pipeline works for any district.</aside>
 </section>
