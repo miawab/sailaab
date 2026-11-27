@@ -80,6 +80,11 @@ npx vercel dev                           # website + /api together (from repo ro
 | [FFmpeg](https://ffmpeg.org/) | Cleans up phone recordings of the voice notes into mp3 | Free, LGPL/GPL |
 | [Meta MMS-TTS Punjabi](https://huggingface.co/facebook/mms-tts-pan) via [Hugging Face Transformers](https://github.com/huggingface/transformers) + [PyTorch](https://pytorch.org/) | Punjabi voice notes (no Microsoft Punjabi voice exists). Runs offline, no key | Free; model CC-BY-NC 4.0, libraries Apache-2.0 / BSD |
 | [Remotion](https://www.remotion.dev/) + [Playwright](https://playwright.dev/) | The demo video: Playwright records the real site, Remotion edits it with captions (`pitch/video/`) | Free (Remotion free licence for individuals), Playwright Apache-2.0 |
+| [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) | Voiceover of the local-voice cut of the demo video, made on our own computer (`pitch/video/scripts/vo_local.py`) | Free, Apache-2.0 |
+| [faster-whisper](https://github.com/SYSTRAN/faster-whisper) (Whisper small.en) | Word-timed captions and the .srt for the demo video, made on our own computer (`pitch/video/scripts/captions_local.py`) | Free, MIT |
+| [NASA Earth Observatory: Lake Manchar is Overflowing](https://science.nasa.gov/earth/earth-observatory/lake-manchar-is-overflowing-150306/) | Real Landsat images of Lake Manchar on 25 Jun and 5 Sep 2022, in the demo video | Public domain (NASA), credited on screen |
+| [Sentinel-2 cloudless 2020 by EOX](https://s2maps.eu) | Satellite imagery under the 3D Dadu flyover in the demo video | Free, CC BY-NC-SA 4.0, credited on screen |
+| [AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) | 3D terrain for the Dadu flyover in the demo video | Free, open data (attribution) |
 | Google Chrome (headless) | Exports the pitch deck slides to PDF (`pitch/deck/export.mjs`) | Free |
 | Vercel | Hosting + API | Free tier |
 

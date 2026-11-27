@@ -1,0 +1,262 @@
+{
+ "s0": [
+  {
+   "start": 0.0,
+   "end": 1.76,
+   "text": "Khabardar. It means beware."
+  },
+  {
+   "start": 2.52,
+   "end": 3.56,
+   "text": "Flood warnings for your house"
+  },
+  {
+   "start": 3.7,
+   "end": 4.38,
+   "text": "not your district."
+  }
+ ],
+ "s1": [
+  {
+   "start": 0.0,
+   "end": 1.16,
+   "text": "In 2022"
+  },
+  {
+   "start": 1.82,
+   "end": 4.52,
+   "text": "one monsoon put a third of Pakistan under water."
+  },
+  {
+   "start": 5.1,
+   "end": 6.94,
+   "text": "Thirty-three million people were affected."
+  },
+  {
+   "start": 7.54,
+   "end": 10.1,
+   "text": "The warnings that existed named whole districts."
+  },
+  {
+   "start": 10.6,
+   "end": 12.12,
+   "text": "But water doesn't flood a district."
+  },
+  {
+   "start": 12.58,
+   "end": 13.42,
+   "text": "It floods a house."
+  }
+ ],
+ "s2": [
+  {
+   "start": 0.0,
+   "end": 1.36,
+   "text": "Here is how it works."
+  },
+  {
+   "start": 1.96,
+   "end": 4.6,
+   "text": "Move the pin anywhere in Pakistan and tap once."
+  },
+  {
+   "start": 5.12,
+   "end": 6.6,
+   "text": "It checks the river forecast"
+  },
+  {
+   "start": 7.1,
+   "end": 9.16,
+   "text": "heavy rain, and flash floods in the hills"
+  },
+  {
+   "start": 9.6,
+   "end": 11.74,
+   "text": "and gives one answer for the next seven days."
+  }
+ ],
+ "s3": [
+  {
+   "start": 0.0,
+   "end": 1.62,
+   "text": "In Nowshera and Dadu"
+  },
+  {
+   "start": 1.84,
+   "end": 4.54,
+   "text": "all forty-four thousand houses have their own level."
+  },
+  {
+   "start": 5.1,
+   "end": 6.38,
+   "text": "Here is one near Johi"
+  },
+  {
+   "start": 6.64,
+   "end": 8.7,
+   "text": "on the twenty-fifth of August 2022."
+  },
+  {
+   "start": 9.74,
+   "end": 11.1,
+   "text": "Danger, from the twenty-seventh."
+  },
+  {
+   "start": 11.56,
+   "end": 12.94,
+   "text": "Three meters above the river"
+  },
+  {
+   "start": 13.16,
+   "end": 14.04,
+   "text": "and it flooded before."
+  }
+ ],
+ "s4": [
+  {
+   "start": 0.0,
+   "end": 1.38,
+   "text": "And the warning is spoken"
+  },
+  {
+   "start": 1.72,
+   "end": 2.92,
+   "text": "in Urdu, Sindhi"
+  },
+  {
+   "start": 3.08,
+   "end": 4.06,
+   "text": "Punjabi or English."
+  }
+ ],
+ "s5": [
+  {
+   "start": 0.0,
+   "end": 0.84,
+   "text": "Does it work?"
+  },
+  {
+   "start": 1.28,
+   "end": 3.4,
+   "text": "We replayed the real 2022 flood."
+  },
+  {
+   "start": 4.02,
+   "end": 6.06,
+   "text": "The Johi channel crossed our warning line"
+  },
+  {
+   "start": 6.06,
+   "end": 7.96,
+   "text": "ten days before its record peak."
+  },
+  {
+   "start": 8.6,
+   "end": 10.88,
+   "text": "Blue houses are the ones that really went under."
+  },
+  {
+   "start": 11.48,
+   "end": 12.84,
+   "text": "Johi town stayed dry."
+  }
+ ],
+ "s6": [
+  {
+   "start": 0.0,
+   "end": 2.18,
+   "text": "We also show where it falls short."
+  },
+  {
+   "start": 2.74,
+   "end": 5.5,
+   "text": "At Nowshera, Pakistan's own gauges saw five"
+  },
+  {
+   "start": 5.5,
+   "end": 7.76,
+   "text": "times more water than the free global model."
+  },
+  {
+   "start": 8.28,
+   "end": 9.28,
+   "text": "The timing was right"
+  },
+  {
+   "start": 9.6,
+   "end": 10.64,
+   "text": "the size was not."
+  },
+  {
+   "start": 11.4,
+   "end": 12.96,
+   "text": "Adding those gauges is our next step."
+  }
+ ],
+ "s7": [
+  {
+   "start": 0.0,
+   "end": 2.04,
+   "text": "And we tested every house blind."
+  },
+  {
+   "start": 2.78,
+   "end": 5.0,
+   "text": "The houses we flag really flooded seventy"
+  },
+  {
+   "start": 5.0,
+   "end": 6.38,
+   "text": "-six percent of the time"
+  },
+  {
+   "start": 6.56,
+   "end": 8.18,
+   "text": "against forty-six for the rest."
+  }
+ ],
+ "s8": [
+  {
+   "start": 0.52,
+   "end": 1.8,
+   "text": "Khabardar. Free data"
+  },
+  {
+   "start": 2.02,
+   "end": 3.14,
+   "text": "every house in Pakistan"
+  },
+  {
+   "start": 3.4,
+   "end": 4.28,
+   "text": "in your own language."
+  }
+ ],
+ "s9": [
+  {
+   "start": 0.0,
+   "end": 2.04,
+   "text": "This is Dadu in 3D"
+  },
+  {
+   "start": 2.4,
+   "end": 4.5,
+   "text": "on the twenty-seventh of August 2022"
+  },
+  {
+   "start": 5.24,
+   "end": 6.98,
+   "text": "the day the Johi channel peaked."
+  },
+  {
+   "start": 7.58,
+   "end": 10.26,
+   "text": "The blue is what satellites saw under water."
+  },
+  {
+   "start": 10.8,
+   "end": 13.06,
+   "text": "Every house is coloured by its own risk."
+  }
+ ]
+}

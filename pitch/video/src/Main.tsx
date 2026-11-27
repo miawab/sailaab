@@ -75,14 +75,14 @@ const Captions: React.FC<{ id: string }> = ({ id }) => {
   );
 };
 
-const Fade: React.FC<{ len: number; children: React.ReactNode }> = ({ len, children }) => {
+export const Fade: React.FC<{ len: number; children: React.ReactNode }> = ({ len, children }) => {
   const f = useCurrentFrame();
   const o = interpolate(f, [0, 8, s(len) - 8, s(len)], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return <AbsoluteFill style={{ opacity: o }}>{children}</AbsoluteFill>;
 };
 
 // Big words over the opening footage.
-const Card: React.FC<{ at: number; to: number; big: string; small?: string }> = ({ at, to, big, small }) => {
+export const Card: React.FC<{ at: number; to: number; big: string; small?: string }> = ({ at, to, big, small }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   if (f < s(at) || f > s(to)) return null;
@@ -102,7 +102,7 @@ const Clip: React.FC<{ sc: Scene }> = ({ sc }) => (
     style={{ width: 1920, height: 1080 }} />
 );
 
-const HousesSlide: React.FC<{ len: number }> = ({ len }) => {
+export const HousesSlide: React.FC<{ len: number }> = ({ len }) => {
   const f = useCurrentFrame();
   const z = interpolate(f, [0, s(len)], [1, 1.06]);
   return (
@@ -112,7 +112,7 @@ const HousesSlide: React.FC<{ len: number }> = ({ len }) => {
   );
 };
 
-const EndCard: React.FC = () => {
+export const EndCard: React.FC = () => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const p = spring({ frame: f, fps, config: { damping: 18 } });

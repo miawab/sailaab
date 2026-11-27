@@ -1,0 +1,102 @@
+<!doctype html>
+<!-- 3D flyover of Dadu on 27 Aug 2022 for the demo video. Recorded by scripts/record_flyover.mjs.
+     Serve the repo root (python -m http.server 8765) and open /pitch/video/flyover/
+     Terrain: AWS Terrain Tiles. Imagery: Sentinel-2 cloudless 2020 by EOX (CC BY-NC-SA 4.0).
+     Flood: UNOSAT 2022 extent. Houses: Google Open Buildings, coloured with our risk score. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Khabardar · Dadu in 3D</title>
+<link rel="stylesheet" href="/web/node_modules/maplibre-gl/dist/maplibre-gl.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700&display=swap">
+<style>
+  html, body, #map { margin: 0; width: 100%; height: 100%; background: #0b0f1a; }
+  .tag { position: absolute; left: 48px; top: 40px; font: 600 30px/1.3 "Plus Jakarta Sans", sans-serif; color: #fff;
+         background: rgba(11, 15, 26, .72); padding: 14px 24px; border-radius: 16px; opacity: 0; transition: opacity .8s; }
+  .tag span { display: block; font-weight: 500; font-size: 22px; color: #c9d1e0; }
+  .key { position: absolute; right: 48px; top: 40px; display: flex; flex-direction: column; gap: 8px; font: 500 22px "Plus Jakarta Sans", sans-serif;
+         color: #fff; background: rgba(11, 15, 26, .72); padding: 16px 22px; border-radius: 16px; opacity: 0; transition: opacity .8s; }
+  .key i { display: inline-block; width: 16px; height: 16px; border-radius: 4px; margin-right: 10px; vertical-align: -2px; }
+  .credit { position: absolute; left: 48px; bottom: 24px; font: 500 16px "Plus Jakarta Sans", sans-serif; color: rgba(255,255,255,.85);
+           background: rgba(11, 15, 26, .6); padding: 6px 12px; border-radius: 8px; }
+  .maplibregl-ctrl-attrib, .maplibregl-ctrl-logo { display: none !important; }
+  .show { opacity: 1; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="tag" id="tag">Dadu, Sindh · 27 Aug 2022<span>The day the Johi channel peaked</span></div>
+<div class="key" id="key">
+  <div><i style="background:#3f8cff"></i>Under water (satellite, 2022)</div>
+  <div><i style="background:#e5484d"></i>Danger</div>
+  <div><i style="background:#e8792b"></i>Warning</div>
+  <div><i style="background:#e9c046"></i>Watch</div>
+  <div><i style="background:#4cc38a"></i>Safe</div>
+</div>
+<div class="credit">Imagery: Sentinel-2 cloudless 2020 by EOX (Copernicus data) · Terrain: AWS Terrain Tiles · Flood: UNOSAT · Buildings: Google Open Buildings</div>
+<script src="/web/node_modules/maplibre-gl/dist/maplibre-gl.js"></script>
+<script>
+// River severity on 27 Aug 2022, from /api/replay (0 = calm, 1 = the 2022 peak).
+const SEVERITY = { johi_dadu: 1.0, indus_dadu: 0.436 };
+const DATA = '/web/public/data/';
+
+const map = new maplibregl.Map({
+  container: 'map',
+  attributionControl: false,
+  fadeDuration: 0,
+  center: [67.48, 26.6], zoom: 10.6, pitch: 72, bearing: 62,
+  maxPitch: 85,
+  style: {
+    version: 8,
+    sources: {
+      sat: { type: 'raster', tileSize: 256, maxzoom: 15,
+        tiles: ['https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg'] },
+      dem: { type: 'raster-dem', encoding: 'terrarium', tileSize: 256, maxzoom: 13,
+        tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'] },
+    },
+    layers: [{ id: 'sat', type: 'raster', source: 'sat', paint: { 'raster-saturation': -0.15, 'raster-contrast': 0.08 } }],
+    sky: { 'sky-color': '#9cc3e6', 'horizon-color': '#e8eef5', 'fog-color': '#dfe7f0', 'sky-horizon-blend': 0.6, 'horizon-fog-blend': 0.7, 'fog-ground-blend': 0.85 },
+    terrain: { source: 'dem', exaggeration: 3 },
+  },
+});
+
+const score = ['*', ['match', ['get', 'river_point'], 'johi_dadu', SEVERITY.johi_dadu, 'indus_dadu', SEVERITY.indus_dadu, 0], ['get', 'exposure'], 100];
+const colour = ['step', score, '#4cc38a', 25, '#e9c046', 50, '#e8792b', 75, '#e5484d'];
+const height = ['step', score, 10, 25, 14, 50, 22, 75, 34];
+
+map.on('load', async () => {
+  const [houses, flood, rivers] = await Promise.all(['houses', 'flood2022', 'rivers'].map((n) => fetch(DATA + n + '.geojson').then((r) => r.json())));
+  houses.features = houses.features.filter((f) => f.properties.river_point in SEVERITY);
+  map.addSource('flood', { type: 'geojson', data: flood });
+  map.addSource('rivers', { type: 'geojson', data: rivers });
+  map.addSource('houses', { type: 'geojson', data: houses });
+  map.addLayer({ id: 'flood', type: 'fill', source: 'flood', paint: { 'fill-color': '#3f8cff', 'fill-opacity': 0, 'fill-opacity-transition': { duration: 2500 } } });
+  map.addLayer({ id: 'rivers', type: 'line', source: 'rivers', paint: { 'line-color': '#7fb8ff', 'line-width': 2.5, 'line-opacity': 0.9 } });
+  map.addLayer({ id: 'houses', type: 'fill-extrusion', source: 'houses', paint: {
+    'fill-extrusion-color': '#d9dde6', 'fill-extrusion-height': 0, 'fill-extrusion-opacity': 0.95,
+    'fill-extrusion-color-transition': { duration: 2200 }, 'fill-extrusion-height-transition': { duration: 2600 } } });
+  window.ready = true;
+});
+
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+// Fixed time slots: 'moveend' can fire early while the terrain settles, which cut moves short.
+const fly = async (opts) => { map.flyTo({ ...opts, essential: true, curve: 1.2 }); await wait(opts.duration + 150); };
+
+// The flyover itself, about 15 s. Called by the recorder once tiles have loaded.
+window.play = async () => {
+  document.getElementById('tag').classList.add('show');
+  await wait(600);
+  map.setPaintProperty('flood', 'fill-opacity', 0.5);
+  const flyIn = fly({ center: [67.625, 26.705], zoom: 13.2, pitch: 70, bearing: 28, duration: 7000 });
+  await wait(2600);
+  document.getElementById('key').classList.add('show');
+  map.setPaintProperty('houses', 'fill-extrusion-height', height);
+  map.setPaintProperty('houses', 'fill-extrusion-color', colour);
+  await flyIn;
+  await fly({ center: [67.632, 26.69], zoom: 14.6, pitch: 74, bearing: -8, duration: 6500 });
+  await wait(800);
+  return true;
+};
+</script>
+</body>
+</html>
