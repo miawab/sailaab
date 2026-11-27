@@ -196,7 +196,7 @@ export default function App() {
     const map = mapRef.current;
     const on = mode === 'air';
     map.setLayoutProperty('air', 'visibility', on ? 'visible' : 'none');
-    for (const id of ['national', 'national-halo', 'houses', 'houses-line']) {
+    for (const id of ['national', 'national-halo', 'houses', 'houses-edge', 'houses-line']) {
       if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', on ? 'none' : (id.startsWith('house') ? (layers.houses ? 'visible' : 'none') : (layers.points ? 'visible' : 'none')));
     }
     if (on && !airLoaded.current) {
@@ -254,6 +254,7 @@ export default function App() {
     const map = mapRef.current;
     if (mode !== 'past' || !replay) {
       map.setPaintProperty('houses', 'fill-color', riskColor(sev));
+      map.setPaintProperty('houses-edge', 'line-color', riskColor(sev));
       if (pointsRef.current) {
         for (const f of pointsRef.current.features) f.properties.level = nationalLevels.current[f.properties.id] ?? null;
         map.getSource('national')?.setData(pointsRef.current);
@@ -272,6 +273,7 @@ export default function App() {
       n += countUpTo(wet, cut[id]);
     }
     map.setPaintProperty('houses', 'fill-color', replayColor(cut));
+    map.setPaintProperty('houses-edge', 'line-color', replayColor(cut));
     setUnderwater(n);
     // the 2022 flood area fades in once the main river passes the danger line
     const d = replay.days[day];

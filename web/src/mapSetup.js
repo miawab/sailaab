@@ -119,7 +119,7 @@ export const LAYER_GROUPS = {
   rivers: ['pk-rivers-glow', 'pk-rivers', 'pk-river-names', 'rivers-glow', 'rivers', 'waterway'],
   points: ['national-halo', 'national'],
   flood2022: ['flood2022'],
-  houses: ['houses', 'houses-line'],
+  houses: ['houses', 'houses-edge', 'houses-line'],
   provinces: ['provinces'],
 };
 
@@ -134,9 +134,12 @@ async function addLayers(map) {
 
   // Showcase district houses: flat footprints coloured by risk (or by water in the 2022 replay).
   map.addSource('houses', { type: 'geojson', data: empty, promoteId: 'id' });
+  // A same-colour edge that is thick when zoomed out, so small village houses stay visible.
+  map.addLayer({ id: 'houses-edge', type: 'line', source: 'houses', minzoom: 12, maxzoom: 16.5,
+    paint: { 'line-color': '#94A3B8', 'line-width': z(12, 2.4, 14, 2, 15.5, 1, 16.5, 0) } }, firstLabel);
   map.addLayer({ id: 'houses', type: 'fill', source: 'houses', minzoom: 12,
     paint: { 'fill-color': '#94A3B8', 'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0.82] } }, firstLabel);
-  map.addLayer({ id: 'houses-line', type: 'line', source: 'houses', minzoom: 14,
+  map.addLayer({ id: 'houses-line', type: 'line', source: 'houses', minzoom: 15.5,
     paint: { 'line-color': '#FFFFFF', 'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 1] } }, firstLabel);
 
   // Smog: soft blobs of colour from the air-quality grid (Air mode only). The Pakistan fade sits on top.

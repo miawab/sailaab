@@ -12,7 +12,7 @@ export const AREAS = {
   nowshera: { name: 'Nowshera', file: '/data/houses_nowshera.geojson', points: ['kabul_nowshera', 'swat_charsadda'],
     main: 'kabul_nowshera', bbox: [71.6, 34.0, 72.1, 34.25], view: { center: [71.97, 34.014], zoom: 15.3 } },
   dadu: { name: 'Dadu', file: '/data/houses_dadu.geojson', points: ['johi_dadu', 'indus_dadu'],
-    main: 'johi_dadu', bbox: [67.6, 26.55, 67.95, 26.82], view: { center: [67.69, 26.732], zoom: 14.9 } },
+    main: 'johi_dadu', bbox: [67.6, 26.55, 67.95, 26.82], view: { center: [67.627, 26.699], zoom: 14.4 } },
 };
 
 export function thresholds(p) {

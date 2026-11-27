@@ -176,7 +176,7 @@ export default function DemoTour({ step, go, onExit, replayProps, proofRiver, pr
         <Replay {...replayProps} />
         <p className="t-note">
           {lead ? <>Crossed Warning on {fmtDate(lead.from)}, peaked on {fmtDate(lead.to)} at {Math.round(lead.q).toLocaleString()} m³/s, its highest day on record. </> : null}
-          Blue houses really flooded (UN map).
+          Blue: houses that really flooded (UN map). Johi town, on the left, stayed dry.
         </p>
       </>
     ),
