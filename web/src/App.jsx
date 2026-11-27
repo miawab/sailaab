@@ -3,12 +3,14 @@ import { createMap, PK_BOUNDS, LAYER_GROUPS } from './mapSetup.js';
 import { AREAS, RIVER_POINTS, severity, riskColor, replayColor, floodShare, thresholds } from './houseRisk.js';
 import { LEVELS } from './levels.js';
 import { hazards, worst } from './hazards.js';
-import { airGrid, airSpot } from './air.js';
+import { airGrid, airSpot, AIR } from './air.js';
 import AirPanel from './components/AirPanel.jsx';
 import Icon from './components/Icon.jsx';
 import Panel from './components/Panel.jsx';
 import Sidebar from './components/Sidebar.jsx';
 import DemoTour, { STEPS } from './components/DemoTour.jsx';
+import Intro from './components/Intro.jsx';
+import { LogoMark } from './components/Logo.jsx';
 
 const getJson = async (url) => {
   const r = await fetch(url);
@@ -85,6 +87,11 @@ export default function App() {
   // The guided demo (null = normal live app). ?demo=1 in the link opens it straight away.
   const [tour, setTour] = useState(() => (new URLSearchParams(location.search).get('demo') === '1' ? 0 : null));
   const [proofRiver, setProofRiver] = useState(null);
+  // The welcome screen, once per visit (not when the link opens the demo directly)
+  const [intro, setIntro] = useState(() => { try { return tour == null && !sessionStorage.getItem('sailaab.seen'); } catch { return true; } });
+  const closeIntro = () => { setIntro(false); try { sessionStorage.setItem('sailaab.seen', '1'); } catch { /* ignore */ } };
+  const [natCounts, setNatCounts] = useState(null);
+  const [airCounts, setAirCounts] = useState(null);
   const [proofHouses, setProofHouses] = useState(null);
   const [layers, setLayers] = useState({ rivers: true, points: true, flood2022: false, houses: true, provinces: true });
   const [home, setHomeState] = useState(() => store.get('sailaab.home'));
@@ -140,6 +147,9 @@ export default function App() {
       if (off) return;
       for (const f of points.features) f.properties.level = nationalLevels.current[f.properties.id] ?? null;
       map.getSource('national')?.setData(points);
+      const c = {};
+      for (const l of Object.values(nationalLevels.current)) if (l) c[l] = (c[l] ?? 0) + 1;
+      setNatCounts(c);
 
       // Houses: one forecast per river point, then the map colours every house itself.
       const ids = Object.keys(RIVER_POINTS);
@@ -201,7 +211,12 @@ export default function App() {
     }
     if (on && !airLoaded.current) {
       airLoaded.current = true;
-      airGrid((p) => inside(p, map.pakistan)).then((g) => map.getSource('air')?.setData(g)).catch(() => { airLoaded.current = false; say('Could not load air data'); });
+      airGrid((p) => inside(p, map.pakistan)).then((g) => {
+        map.getSource('air')?.setData(g);
+        const c = {};
+        for (const f of g.features) c[f.properties.level] = (c[f.properties.level] ?? 0) + 1;
+        setAirCounts(c);
+      }).catch(() => { airLoaded.current = false; say('Could not load air data'); });
     }
   }, [ready, mode, layers]);
 
@@ -429,7 +444,12 @@ export default function App() {
         layers={layers} toggleLayer={(k) => setLayers((l) => ({ ...l, [k]: !l[k] }))}
         home={home} homeLevel={homeRisk?.level} setHome={saveHome} clearHome={clearHome} goHome={goHome}
         lang={lang} setLang={setLang} startTour={startTour}
+        summary={mode === 'air'
+          ? airCounts && { title: 'Air today', when: 'PM2.5', unit: 'places checked', counts: airCounts, labels: Object.fromEntries(Object.entries(AIR).map(([k, v]) => [k, v.label])) }
+          : natCounts && { title: 'Rivers, next 7 days', when: q ? '25 Aug 2022' : 'Live', unit: 'river points', counts: natCounts, labels: Object.fromEntries(Object.entries(LEVELS).map(([k, v]) => [k, v.label])) }}
       />
+
+      {intro && tour == null && <Intro onOpen={closeIntro} onDemo={() => { closeIntro(); startTour(); }} />}
 
       {tour != null && (
         <DemoTour
@@ -442,9 +462,9 @@ export default function App() {
 
       {!sideOpen && tour == null && (
         <button className="menu-btn" onClick={() => setSideOpen(true)} aria-label="Open menu">
+          <LogoMark size={30} />
+          <span className="brand-name">Khabardar</span>
           <Icon name="menu" size={18} />
-          <span className="brand-mark">سیلاب</span>
-          <span className="brand-name">Sailaab</span>
         </button>
       )}
 
@@ -476,7 +496,7 @@ export default function App() {
           <span className="check-icon"><Icon name={!inPk ? 'x' : mode === 'air' ? 'wind' : 'drop'} size={22} /></span>
           <span className="check-text">
             <b>{inPk ? checkLabel : 'Outside Pakistan'}</b>
-            <small className="font-nastaliq">{inPk ? checkUr : 'پاکستان سے باہر'}</small>
+            <small className="font-ur">{inPk ? checkUr : 'پاکستان سے باہر'}</small>
           </span>
         </button>
       )}

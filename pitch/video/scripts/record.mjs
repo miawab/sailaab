@@ -20,6 +20,7 @@ const CURSOR = `
   addEventListener('DOMContentLoaded', () => document.body.appendChild(c));
   try { localStorage.removeItem('sailaab.home'); } catch {}
 `;
+const SKIP_INTRO = `try { sessionStorage.setItem('sailaab.seen', '1'); } catch {}`;
 
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -34,14 +35,15 @@ async function moveClick(page, target) {
 const step = (page, i) => page.evaluate((n) => document.querySelectorAll('.t-dots i')[n].click(), i);
 const fly = (page, center, zoom, ms = 3000) => page.evaluate(([c, z, d]) => window.sailaabMap.flyTo({ center: c, zoom: z, duration: d }), [center, zoom, ms]);
 
-async function clip(name, url, fn) {
+async function clip(name, url, fn, { intro = false, mouse = [1100, 540] } = {}) {
   const browser = await chromium.launch({ channel: 'chrome', headless: false, args: ['--window-size=1920,1080', '--force-device-scale-factor=1'] });
   const ctx = await browser.newContext({ viewport: size, recordVideo: { dir: OUT, size } });
   await ctx.addInitScript(CURSOR);
+  if (!intro) await ctx.addInitScript(SKIP_INTRO);
   const page = await ctx.newPage();
   await page.goto(APP + url);
   await page.waitForFunction(() => window.sailaabMap?.loaded());
-  await page.mouse.move(1100, 540);
+  await page.mouse.move(...mouse);
   await pause(2500);
   await fn(page);
   const video = page.video();
@@ -53,6 +55,13 @@ async function clip(name, url, fn) {
 }
 
 const CLIPS = {
+  // The welcome screen: logo, water rising, then into the map
+  intro: ['/', async (page) => {
+    await pause(5500);
+    await moveClick(page, '.intro-go');
+    await pause(2500);
+  }, { intro: true, mouse: [1560, 930] }],
+
   // Pakistan, with the "why" card
   why: ['/?demo=1', async (page) => { await pause(7000); }],
 
@@ -107,7 +116,7 @@ const CLIPS = {
 };
 
 const only = process.argv[2];
-for (const [name, [url, fn]] of Object.entries(CLIPS)) {
+for (const [name, [url, fn, opts]] of Object.entries(CLIPS)) {
   if (only && only !== name) continue;
-  await clip(name, url, fn);
+  await clip(name, url, fn, opts);
 }

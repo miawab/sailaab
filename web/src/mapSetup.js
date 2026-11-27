@@ -1,4 +1,4 @@
-// The map: our own flat, top-down "Sailaab" style drawn from OpenStreetMap vector data.
+// The map: our own flat, top-down "Khabardar" style drawn from OpenStreetMap vector data.
 // Pakistan is white, everything else fades out, water is sky blue. Detail appears as you zoom:
 // big roads, then main roads, then streets, then buildings.
 import maplibregl from 'maplibre-gl';

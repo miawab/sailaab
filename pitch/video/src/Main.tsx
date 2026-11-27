@@ -1,18 +1,33 @@
-// The Sailaab demo video (under 2 minutes). Real footage of the site, recorded by scripts/record.mjs,
+// The Khabardar demo video (under 2 minutes). Real footage of the site, recorded by scripts/record.mjs,
 // with an edge-tts voiceover (scripts/vo.py) and burned-in captions. Render: npm run render
 import React from "react";
 import {
-  AbsoluteFill, Audio, Img, OffthreadVideo, Sequence, Series, interpolate, spring,
+  AbsoluteFill, Audio, Img, continueRender, delayRender, OffthreadVideo, Sequence, Series, interpolate, spring,
   staticFile, useCurrentFrame, useVideoConfig,
 } from "remotion";
 import lines from "../public/vo/lines.json";
 import VO from "../public/vo/durations.json";
+import { LogoMark } from "../../../web/src/components/Logo.jsx";
 
-// Colours from the Sailaab site.
+// Colours from the Khabardar site.
 const INK = "#0B0F1A";
 const COBALT = "#2540F0";
 const BG = "#EEF2F8";
-const FONT = '"Inter", "Segoe UI", system-ui, sans-serif';
+const FONT = '"Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif';
+const DISPLAY = '"Bricolage Grotesque", "Plus Jakarta Sans", sans-serif';
+
+// The site's fonts, loaded before any frame renders.
+const fontHandle = delayRender("fonts");
+const link = document.createElement("link");
+link.rel = "stylesheet";
+link.href = "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Plus+Jakarta+Sans:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@700&display=block";
+link.onload = () => Promise.all([
+  document.fonts.load('800 100px "Bricolage Grotesque"'),
+  document.fonts.load('600 40px "Plus Jakarta Sans"'),
+  document.fonts.load('700 80px "Noto Nastaliq Urdu"', "خبردار"),
+]).then(() => continueRender(fontHandle), () => continueRender(fontHandle));
+link.onerror = () => continueRender(fontHandle);
+document.head.appendChild(link);
 
 const FPS = 30;
 const s = (sec: number) => Math.round(sec * FPS);
@@ -20,6 +35,7 @@ const s = (sec: number) => Math.round(sec * FPS);
 type Scene = { id: keyof typeof VO; len: number; clip?: string; from?: number; rate?: number; extra?: number };
 // from = where in the clip to start (s), rate = playback speed, len = scene length (s)
 const SCENES: Scene[] = [
+  { id: "s0", clip: "intro", from: 0.9, rate: 1, len: 6.0 },
   { id: "s1", clip: "why", from: 0, rate: 0.72, len: 13.6 },
   { id: "s2", clip: "live", from: 1.2, rate: 1, len: 11.6 },
   { id: "s3", clip: "house", from: 6.2, rate: 1.45, len: 13.4 },
@@ -75,7 +91,7 @@ const Card: React.FC<{ at: number; to: number; big: string; small?: string }> = 
   return (
     <div style={{ position: "absolute", right: 120, top: 330, width: 640, opacity: p * out, transform: `translateY(${(1 - p) * 30}px)`,
       background: "rgba(255,255,255,.96)", borderRadius: 32, padding: "36px 44px", boxShadow: "0 24px 60px rgba(16,24,40,.18)", fontFamily: FONT }}>
-      <div style={{ fontSize: 84, fontWeight: 700, letterSpacing: "-0.04em", color: INK, lineHeight: 1 }}>{big}</div>
+      <div style={{ fontFamily: DISPLAY, fontSize: 84, fontWeight: 800, letterSpacing: "-0.045em", color: INK, lineHeight: 1 }}>{big}</div>
       {small && <div style={{ fontSize: 32, color: "#4A5468", marginTop: 14, lineHeight: 1.3 }}>{small}</div>}
     </div>
   );
@@ -102,9 +118,10 @@ const EndCard: React.FC = () => {
   const p = spring({ frame: f, fps, config: { damping: 18 } });
   return (
     <AbsoluteFill style={{ background: BG, alignItems: "center", justifyContent: "center", fontFamily: FONT }}>
-      <div style={{ textAlign: "center", opacity: p, transform: `scale(${0.94 + 0.06 * p})` }}>
-        <div style={{ fontFamily: '"Noto Nastaliq Urdu", serif', fontSize: 120, color: COBALT, lineHeight: 1.6 }}>سیلاب</div>
-        <div style={{ fontSize: 120, fontWeight: 700, letterSpacing: "-0.045em", color: INK, lineHeight: 1 }}>Sailaab</div>
+      <div style={{ textAlign: "center", opacity: p, transform: `scale(${0.94 + 0.06 * p})`, display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <LogoMark size={150} />
+        <div style={{ fontFamily: '"Noto Nastaliq Urdu", serif', fontSize: 84, color: COBALT, lineHeight: 1.9, marginTop: 10 }}>خبردار</div>
+        <div style={{ fontFamily: DISPLAY, fontSize: 130, fontWeight: 800, letterSpacing: "-0.03em", color: INK, lineHeight: 1 }}>Khabardar</div>
         <div style={{ fontSize: 40, color: "#4A5468", marginTop: 28 }}>Flood warnings for your house, not your district</div>
         <div style={{ display: "inline-flex", gap: 16, marginTop: 56 }}>
           <span style={{ background: INK, color: "#fff", borderRadius: 999, padding: "16px 30px", fontSize: 30, fontWeight: 600 }}>github.com/miawab/sailaab</span>

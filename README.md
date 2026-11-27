@@ -1,10 +1,12 @@
-# Sailaab (سیلاب)
+# Khabardar (خبردار)
 
 **Flood warnings for your house, not your district.**
 
-In 2022, floods covered a third of Pakistan. The warnings that existed were district-wide text bulletins, written in English and sent too late. Sailaab tells one family whether **their own house** is at risk in the next 7 days and why, on a simple map and in a voice note in their own language.
+*Khabardar* (خبردار) means "beware". It is the word our danger voice alert starts with. (The project began as Sailaab, "flood", which is why the repo keeps that name.)
 
-**Live site:** https://sailaab-pk.vercel.app (add `?demo=1` to see the 2022 flood demo)
+In 2022, floods covered a third of Pakistan. The warnings that existed were district-wide text bulletins, written in English and sent too late. Khabardar tells one family whether **their own house** is at risk in the next 7 days and why, on a simple map and in a voice note in their own language.
+
+**Live site:** https://khabardar-pk.vercel.app (add `?demo=1` to see the 2022 flood demo)
 
 **Demo video:** _link added on submission_
 
@@ -67,7 +69,7 @@ npx vercel dev                           # website + /api together (from repo ro
 | [Copernicus EWDS](https://ewds.climate.copernicus.eu/) (GloFAS forecast archive) | Proof: forecasts issued in Aug 2022 (script ready, needs a free account) | Free account, CC BY 4.0 |
 | geopandas, shapely, pyproj, rasterio, pandas, numpy, scipy, requests, s2sphere | Python data pipeline (`data/`) | BSD / MIT / Apache-2.0 |
 | [MapLibre GL JS](https://maplibre.org/) | The map | BSD-3 |
-| [OpenFreeMap](https://openfreemap.org/) (OpenStreetMap data) | Map tiles + fonts for our own Sailaab map style | Free, no key, ODbL (OSM) |
+| [OpenFreeMap](https://openfreemap.org/) (OpenStreetMap data) | Map tiles + fonts for our own Khabardar map style | Free, no key, ODbL (OSM) |
 | [Open-Meteo Weather + Ensemble API](https://open-meteo.com/en/docs/ensemble-api) (ECMWF) | 7-day rain forecast, soil wetness, and the 50 forecast runs behind the rain "% sure" | Free, no key, CC BY 4.0 |
 | [Open-Meteo Historical Forecast API](https://open-meteo.com/en/docs/historical-forecast-api) | Rain on the 2022 demo day | Free, no key, CC BY 4.0 |
 | [Open-Meteo Air Quality API](https://open-meteo.com/en/docs/air-quality-api) (Copernicus CAMS) | Smog (PM2.5) forecast for the Air mode | Free, no key, CC BY 4.0 |

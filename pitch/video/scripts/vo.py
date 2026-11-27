@@ -4,14 +4,15 @@ import asyncio, json, edge_tts
 
 VOICE = "en-US-AndrewNeural"
 LINES = {
+ "s0": "Khabardar. It means beware. Flood warnings for your house, not your district.",
  "s1": "In 2022, one monsoon put a third of Pakistan under water. Thirty-three million people were affected. The warnings that existed named whole districts. But water doesn't flood a district. It floods a house.",
- "s2": "This is Sailaab. Move the pin anywhere in Pakistan and tap once. It checks the river forecast, heavy rain, and flash floods in the hills, and gives one answer for the next seven days.",
+ "s2": "Here is how it works. Move the pin anywhere in Pakistan and tap once. It checks the river forecast, heavy rain, and flash floods in the hills, and gives one answer for the next seven days.",
  "s3": "In Nowshera and Dadu, all forty-four thousand houses have their own level. Here is one near Johi, on the twenty-fifth of August 2022. Danger, from the twenty-seventh. Three meters above the river, and it flooded before.",
  "s4": "And the warning is spoken, in Urdu, Sindhi, Punjabi or English.",
  "s5": "Does it work? We replayed the real 2022 flood. The Johi channel crossed our warning line ten days before its record peak. Blue houses are the ones that really went under. Johi town stayed dry.",
  "s6": "We also show where it falls short. At Nowshera, Pakistan's own gauges saw five times more water than the free global model. The timing was right, the size was not. Adding those gauges is our next step.",
  "s7": "And we tested every house blind. The houses we flag really flooded seventy-six percent of the time, against forty-six for the rest.",
- "s8": "Sailaab. Free data, every house in Pakistan, in your own language.",
+ "s8": "Khabardar. Free data, every house in Pakistan, in your own language.",
 }
 
 async def main():

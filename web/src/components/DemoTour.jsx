@@ -143,7 +143,7 @@ export default function DemoTour({ step, go, onExit, replayProps, proofRiver, pr
     ),
     what: (
       <>
-        <div className="t-eyebrow">What Sailaab does</div>
+        <div className="t-eyebrow">What Khabardar does</div>
         <h2>Move the pin, tap once, get an answer</h2>
         <div className="t-rows">
           <Row icon="waves" title="River" sub="235 points, 7-day forecast" />

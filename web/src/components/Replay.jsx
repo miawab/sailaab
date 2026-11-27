@@ -2,7 +2,7 @@ import { LEVELS, fmtDate } from '../levels.js';
 import { worst } from '../hazards.js';
 import Icon from './Icon.jsx';
 
-// What Sailaab would have said on day i: the worst river level in the 7 days ahead.
+// What Khabardar would have said on day i: the worst river level in the 7 days ahead.
 export function saidOn(days, i) {
   const ahead = days.slice(i, i + 7);
   const lvl = worst(...ahead.map((d) => d.level));
@@ -10,7 +10,7 @@ export function saidOn(days, i) {
   return { level: lvl, date: first?.date };
 }
 
-// The 2022 replay player: date, what Sailaab said vs the river that day, the river line, play + slider.
+// The 2022 replay player: date, what Khabardar said vs the river that day, the river line, play + slider.
 export default function Replay({ replay, day, setDay, playing, setPlaying, underwater, totalHouses }) {
   if (!replay) return <div className="sb-empty"><div className="spinner sm" /></div>;
   const days = replay.days;
@@ -32,7 +32,7 @@ export default function Replay({ replay, day, setDay, playing, setPlaying, under
       <div className="replay-date">{fmtDate(d.date)} <span>2022</span></div>
 
       <div className="said">
-        <div><span>Sailaab said</span><b style={{ color: S.color }}><Icon name={S.icon} size={15} stroke={2.4} />{S.label}</b></div>
+        <div><span>Khabardar said</span><b style={{ color: S.color }}><Icon name={S.icon} size={15} stroke={2.4} />{S.label}</b></div>
         <div><span>River that day</span><b style={{ color: R.color }}><Icon name={R.icon} size={15} stroke={2.4} />{R.label}</b></div>
       </div>
 
