@@ -8,7 +8,7 @@ In 2022, floods covered a third of Pakistan. The warnings that existed were dist
 
 **Live site:** https://khabardar-pk.vercel.app (add `?demo=1` to see the 2022 flood demo)
 
-**Demo video:** _link added on submission_
+**Demo video:** https://www.youtube.com/watch?v=EtIw-AQXu_k (1:58, captions on)
 
 ## What it does
 1. **Move the pin, tap "Safe here?"**: anywhere in Pakistan you get one answer (Safe / Watch / Warning / Danger) for the next 7 days, built from three checks:
